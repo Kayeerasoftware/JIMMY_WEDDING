@@ -1102,7 +1102,7 @@
           const result = await response.json();
           console.log('Server response:', result);
           if (result.result === 'success') {
-            alert('Form submitted successfully! Total Budget Selected: ' + document.getElementById('totalSelections').value + ' UGX');
+            alert('Thank you for supporting Agaba Jimmy! You pledg has been sent to the database.Total Budget Selected is: ' + document.getElementById('totalSelections').value + ' UGX');
             document.getElementById('weddingForm').reset();
             fields.forEach(field => document.getElementById(field).classList.remove('valid'));
             selectedItems = [];
