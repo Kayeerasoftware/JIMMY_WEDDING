@@ -422,6 +422,23 @@
     </div>-->
     <p class = "jimmy">Thank You JIMMY & JOSTER For Showing Us Endless Love. We Wish You Success In all</p>
 
+    <!-- Slider -->
+    <div class="slider-container max-w-6xl mx-auto my-8 overflow-hidden rounded-lg shadow-lg">
+        <div class="slides flex transition-transform duration-500">
+            <img src=".jpg" alt="Slide 1" class="w-full h-96 object-cover">
+            <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted autoplay loop class="w-full h-96 object-cover"></video>
+            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
+            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
+            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
+
+            <img src=".jpeg" alt="Slide 1" class="w-full h-96 object-cover">
+            <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted autoplay loop class="w-full h-96 object-cover"></video>
+            <img src=".jpeg" alt="Slide 3" class="w-full h-96 object-cover">
+            <img src=".jpeg" alt="Slide 3" class="w-full h-96 object-cover">
+            <img src=.jpeg" alt="Slide 3" class="w-full h-96 object-cover">            
+        </div>
+    </div>
+
     <div class="budget-section">
       <div class="budget-title">To pledge, Click on the block to see the list of items with their prices in it</div>
       
@@ -1119,6 +1136,19 @@
         alert('Please fill all required fields and select at least one item.');
       }
     });
+
+            // Slider
+        let slideIndex = 0;
+        function showSlides() {
+            try {
+                const slides = document.querySelector('.slides');
+                const totalSlides = document.querySelectorAll('.slides > *').length;
+                slideIndex = (slideIndex + 1) % totalSlides;
+                slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+            } catch (error) {
+                showToast('Error in slider: ' + error.message, 'error');
+            }
+        }
   </script>
 </body>
 </html>
