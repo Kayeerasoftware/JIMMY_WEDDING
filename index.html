@@ -944,7 +944,25 @@
               <Button 
                  onclick="document.getElementById('formOverlay').style.display='block'; document.getElementById('formFrame').src=
                    
-                   '    <div class="form-section">
+                   '   linked source'
+                   
+                   ; return false;"
+                 style="position: absolute; top: 10px; right: 10px; background-color: green; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px;">
+                 SELECTED ITEMS 
+              </Button>
+              <!-- Overlay form container -->
+              <div id="formOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+                <div style="position:relative; width:90%; height:90%; margin:auto; top:5%; background:#fff; border-radius:8px; overflow:hidden;">
+                  <!-- Close button -->
+                  <a href="#" onclick="document.getElementById('formOverlay').style.display='none'; return false;"
+                     style="position:absolute; top:10px; right:15px; font-size:24px; color:red; text-decoration:none;">&times;</a>
+                  <!-- Embedded form -->
+                  <iframe id="formFrame" style="width:100%; height:100%; border:none;"></iframe>
+                </div>
+              </div>
+
+
+   <div class="form-section">
       <div class="form-title">Enter your information and send to us</div>
       <form id="weddingForm">
         <div class="form-group">
@@ -978,23 +996,7 @@
         <button type="submit">I Have Selected that!, so I do Submit</button>
       </form>
     </div>
-  </div>'
-                   
-                   
-                   ; return false;"
-                 style="position: absolute; top: 10px; right: 10px; background-color: green; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px;">
-                 SELECTED ITEMS 
-              </Button>
-              <!-- Overlay form container -->
-              <div id="formOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
-                <div style="position:relative; width:90%; height:90%; margin:auto; top:5%; background:#fff; border-radius:8px; overflow:hidden;">
-                  <!-- Close button -->
-                  <a href="#" onclick="document.getElementById('formOverlay').style.display='none'; return false;"
-                     style="position:absolute; top:10px; right:15px; font-size:24px; color:red; text-decoration:none;">&times;</a>
-                  <!-- Embedded form -->
-                  <iframe id="formFrame" style="width:100%; height:100%; border:none;"></iframe>
-                </div>
-              </div>
+  </div>
 
 
   <p class = "jimmy2">Contact AGABA JIMMY ON 0785441332 Or meet him in person</p>
