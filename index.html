@@ -4,1072 +4,482 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jimmy & Joster Wedding Budget</title>
-  <style> 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background-color: #f8f1f5;
-      color: #333;
-      padding: 20px;
-      line-height: 1.6;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8f1f5, #fff1f7);
+      color: #2d1b4e;
+      padding-top: 120px; /* Offset for fixed header */
     }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
     }
-
-    .title-box {
-      position: relative;
-      background-image: url('Jmmy wedding.jpeg');
-      background-size: cover;
-      background-position: center;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 10px;
-      text-align: center;
-      overflow: hidden;
-      animation: bgPulse 10s infinite alternate;
-      opacity: 0.7;
+    .category-card {
+      transition: all 0.3s ease;
     }
-
-    @keyframes bgPulse {
-      0% { filter: brightness(100%); }
-      50% { filter: brightness(120%) saturate(110%); }
-      100% { filter: brightness(100%); }
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
-
-    h1 {
-      font-size: 2.2em;
-      color: #fff;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      animation: dance 5s infinite alternate;
-      position: relative;
-      z-index: 1;
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
     }
-
-    @keyframes dance {
-      0% { transform: translateY(0) rotate(0deg); color: #6b3e8e; }
-      25% { transform: translateY(-10px) rotate(5deg); color: #ff6f91; }
-      50% { transform: translateY(0) rotate(0deg); color: #28a745; }
-      75% { transform: translateY(-10px) rotate(-5deg); color: #007bff; }
-      100% { transform: translateY(0) rotate(0deg); color: #6b3e8e; }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-
-    .jimmy {
-      text-align: center;
-      font-size: 0.7em;
-      color: #d85706f3; /* This will be overridden by animation */
-      margin-bottom: 20px;
-      font-weight: bold;
-      animation: colorCycle 4s infinite linear, swingSide 5s infinite ease-in-out;
+    .slide {
+      flex: 0 0 100%;
     }
-
-    @keyframes colorCycle {
-  0%   { color: #d85706; }
-  25%  { color: #06d8a2; }
-  50%  { color: #0675d8; }
-  75%  { color: #d806b2; }
-  100% { color: #d85706; }
-}
-
-@keyframes swingSide {
-  0%   { transform: translateX(0); }
-  25%  { transform: translateX(-5px); }
-  50%  { transform: translateX(5px); }
-  75%  { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
-}
-
-.jimmy2{
-      text-align: center;
-      font-size: 1.5em;
-      color: #000000f3; /* This will be overridden by animation */
-      margin-bottom: 20px;
-      font-weight: bold;
-}
-    .budget-section {
-      margin-bottom: 40px;
+    .heart-pulse {
+      animation: heartPulse 2s infinite;
     }
-
-    .budget-title {
-      text-align: center;
-      font-size: 1.7em;
-      color: #0814fdfd;
-      margin-bottom: 20px;
-      font-weight: bold;
-      animation: fadeScale 10s ease-in-out infinite alternate;
-      
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
-
-    @keyframes fadeScale {
-      20% { opacity: 0.4; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1); }
+    .fixed-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1001; /* Above header */
     }
-
-    .category {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 15px;
-      overflow: hidden;
+    .pledge-counter {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      z-index: 1001; /* Above header */
+      background: #ffffff;
+      color: #2d1b4e;
+      padding: 8px 12px;
+      border-radius: 9999px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 0.9rem;
+      font-weight: 600;
     }
-
-    .category-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background-color: #6b3e8e;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
-    .category-header:hover {
-      background-color: #5a3276;
-    }
-
-    .dropdown {
+    .modal-overlay {
+      position: fixed;
+      top: 120px; /* Offset to start below fixed header */
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.5);
       display: none;
-      padding: 20px;
-      background-color: #f9f9f9;
+      align-items: flex-start; /* Align content at the top */
+      justify-content: center;
+      z-index: 999;
+      padding-top: 1rem; /* Additional padding for spacing */
     }
-
-    .dropdown table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .dropdown th, .dropdown td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-      cursor: pointer;
-    }
-
-    .dropdown th {
-      background-color: #e6d9f2;
-      color: #333;
-    }
-
-    .dropdown td:hover {
-      background-color: #e0e0e0;
-    }
-
-    .subtotal-btn {
-      background-color: #ff6f91;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s;
-    }
-
-    .subtotal-btn:hover {
-      background-color: #e65b7c;
-    }
-
-    .selected-items-section {
-      margin-top: 40px;
-    }
-
-    .selected-items-title {
-      text-align: center;
-      font-size: 1.5em;
-      color: #6b3e8e;
-      margin-bottom: 20px;
-      font-weight: bold;
-      animation: slideIn 1s ease-out;
-    }
-
-    @keyframes slideIn {
-      0% { transform: translateX(-50px); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-
-    .selected-items-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #fff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .selected-items-table th, .selected-items-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .selected-items-table th {
-      background-color: #6b3e8e;
-      color: white;
-    }
-
-    .selected-items-table input {
-      width: 100%;
-      padding: 5px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.9em;
-    }
-
-    .selected-items-table select {
-      padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      font-size: 0.9em;
-    }
-
-    .selected-items-table select.cleared {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .selected-items-table select.pledged {
-      background-color: #ffc107;
-      color: #333;
-    }
-
-    .remove-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8em;
-    }
-
-    .remove-btn:hover {
-      background-color: #c82333;
-    }
-
-    .total-row {
-      font-weight: bold;
-      background-color: #b587ee44;
-    }
-
-    .total-row td {
-      padding: 15px;
-    }
-
-    .form-section {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      margin: 40px auto;
-    }
-
-    .form-title {
-      text-align: center;
-      font-size: 1.5em;
-      color: #6b3e8e;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
-
-    .form-group {
+    .modal-overlay.visible {
       display: flex;
-      align-items: center;
-      margin-bottom: 15px;
     }
-
-    .form-group label {
-      flex: 0 0 150px;
-      color: #6b3e8e;
-      font-weight: bold;
-      margin-right: 10px;
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      max-width: 90%;
+      max-height: calc(100vh - 140px); /* Adjust for header and padding */
+      overflow-y: auto;
+      position: relative;
     }
-
-    .form-group input, .form-group textarea {
-      flex: 1;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.9em;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: #6b3e8e;
-      box-shadow: 0 0 8px rgba(107, 62, 142, 0.2);
-      outline: none;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    .error {
-      border-color: #dc3545;
-      background-color: #fff1f2;
-    }
-
-    .valid {
-      border-color: #28a745;
-      background-color: #e6ffed;
-    }
-
-    button[type="submit"] {
-      background-color: #6b3e8e;
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(to right, #6b21a8, #db2777);
       color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      width: 100%;
-      transition: background-color 0.3s;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #5a3276;
-    }
-
-    @media (max-width: 768px) {
-      .title-box {
-        padding: 15px;
-      }
-
-      h1 {
-        font-size: 1.8em;
-      }
-
-      .budget-title, .selected-items-title, .form-title {
-        font-size: 1.2em;
-      }
-
-      .category-header {
-        font-size: 1em;
-        padding: 10px 15px;
-      }
-
-      .dropdown th, .dropdown td {
-        padding: 8px;
-        font-size: 0.9em;
-      }
-
-      .subtotal-btn {
-        padding: 8px 15px;
-        font-size: 0.9em;
-      }
-
-      .form-group {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .form-group label {
-        margin-bottom: 5px;
-        flex: none;
-      }
-
-      .selected-items-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 10px;
-      }
-
-      .dropdown table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-
-      .title-box {
-        padding: 10px;
-      }
-    }
-
-        .site-footer {
       text-align: center;
-      font-size: 0.9em;
-      color: #ffffffcc; /* Soft white */
-      background-color: #1a1a1a; /* Dark background */
-      padding: 10px 5px;
-      border-top: 1px solid #333;
-      margin-top: 20px;
-      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1.5rem;
+      .slider-container {
+    margin-top: 120px; /* Offset to start below fixed header */
+  }
     }
-
   </style>
 </head>
-<body>
-<!--  <div class="container">
-    <div class="title-box">
-      <h1 >Proposed Budget for Jimmy Agaba & Joster Kimuli Wedding<br>5th July 2025</h1>
-    </div>-->
-    <p class = "jimmy">Thank You JIMMY & JOSTER For Showing Us Endless Love. We Wish You Success In all</p>
+<body class="min-h-screen">
+  <!-- Fixed Header -->
+  <header>
+    <h1 class="text-4xl md:text-5xl font-bold mb-2">Jimmy & Joster's Wedding</h1>
+    <p class="text-lg md:text-xl">July 5th, 2025</p>
+    <p class="mt-4 text-sm animate-pulse">Thank you for supporting our journey of love 💖</p>
+  </header>
 
-  
-    <!-- Slider -->
-    <div class="slider-container max-w-6xl mx-auto my-8 overflow-hidden rounded-lg shadow-lg">
-        <div class="slides flex transition-transform duration-500">
-            <img src=".jpg" alt="Slide 1" class="w-full h-96 object-cover">
-            <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted autoplay loop class="w-full h-96 object-cover"></video>
-            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
-            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
-            <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">    
-          <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
-          <img src=".jpg" alt="Slide 3" class="w-full h-96 object-cover">
-        </div>
+  <!-- Fixed Button for Your Pledges -->
+  <button id="togglePledgesBtn" class="fixed-button bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-800 transition duration-300">
+    Your Pledges
+  </button>
+  <!-- Pledge Counter -->
+  <div id="pledgeCounter" class="pledge-counter">Pledges: 0</div>
+
+  <!-- Slider -->
+  <div class="slider-container max-w-6xl mx-auto my-8 overflow-hidden rounded-lg shadow-lg">
+    <div class="slides flex transition-transform duration-500">
+      <img src="Jimmy1-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <video src="Jimmy1-vid.mp4" muted autoplay loop class="slide w-full h-96 object-cover"></video>
+      <img src="Jimmy4-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <img src="Jimmy3-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <img src="Jimmy6-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <img src="Jimmy5-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <img src="Jimmy2-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
+      <img src="Jimmy7-min.jpeg" alt="You are really missing" class="slide w-full h-96 object-cover">
     </div>
+  </div>
 
-    <div class="budget-section">
-      <div class="budget-title">To pledge, Click on the block to see the list of items with their prices in it</div>
-      
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('church')">
-          1. Church
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="church">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Church Fees', 'Lps', 220000, 220000)">
-                <td>Church Fees</td><td>Lps</td><td>220,000</td><td>220,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Choir', 'Lps', 250000, 250000)">
-                <td>Choir</td><td>Lps</td><td>250,000</td><td>250,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Rings', 'Lps', 200000, 200000)">
-                <td>Rings</td><td>Lps</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Decoration', 'Lps', 100000, 100000)">
-                <td>Decoration</td><td>Lps</td><td>100,000</td><td>100,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Order of Mass', 'Lps', 300000, 300000)">
-                <td>Order of Mass</td><td>Lps</td><td>300,000</td><td>300,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <!-- Your Pledges Modal -->
+  <div id="pledgesModal" class="modal-overlay">
+    <div class="modal-content max-w-6xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-purple-700">Your Pledges</h2>
+        <p >(Your can edit Item, Qty	and Unit Cost)</p>
+        <button id="closePledgesBtn" class="text-red-500 text-2xl">×</button>
       </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('groom')">
-          2. Groom
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="groom">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Suit y\' Omu', '1', 500000, 500000)">
-                <td>Suit y' Omu</td><td>1</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Changing', '1', 200000, 200000)">
-                <td>Changing</td><td>1</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', '2', 100000, 200000)">
-                <td>Shoes</td><td>2</td><td>100,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salon', 'Lps', 20000, 20000)">
-                <td>Salon</td><td>Lps</td><td>20,000</td><td>20,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Stokings', 'Lps', 50000, 50000)">
-                <td>Stokings</td><td>Lps</td><td>50,000</td><td>50,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Neck ties', 'Lps', 40000, 40000)">
-                <td>Neck ties</td><td>Lps</td><td>40,000</td><td>40,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Handkerchiefs', 'Lps', 20000, 20000)">
-                <td>Handkerchiefs</td><td>Lps</td><td>20,000</td><td>20,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('bestman')">
-          3. Best Man
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="bestman">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Suit for Best Man', 'Lps', 400000, 400000)">
-                <td>Suit for Best Man</td><td>Lps</td><td>400,000</td><td>400,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Changing', 'Lps', 200000, 200000)">
-                <td>Changing</td><td>Lps</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', 'Lps', 200000, 200000)">
-                <td>Shoes</td><td>Lps</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salon', 'Lps', 10000, 10000)">
-                <td>Salon</td><td>Lps</td><td>10,000</td><td>10,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('entourage')">
-          4. Entourage
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="entourage">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Suits', '6', 400000,  ascended
-                <td>Suits</td><td>6</td><td>400,000</td><td>2,400,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', '6', 150000, 900000)">
-                <td>Shoes</td><td>6</td><td>150,000</td><td>900,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salon', '6', 6666.67, 40000)">
-                <td>Salon</td><td>6</td><td>6,666.67</td><td>40,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('metron1')">
-          5. Bride
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="metron1">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Wedding gown', '1', 1000000, 1000000)">
-                <td>Wedding gown</td><td>1</td><td>1,000,000</td><td>1,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Changing', '1', 500000, 500000)">
-                <td>Changing</td><td>1</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', '1', 200000, 200000)">
-                <td>Shoes</td><td>1</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salon', 'Lps', 800000, 800000)">
-                <td>Salon</td><td>Lps</td><td>800,000</td><td>800,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Handkerchiefs', 'Lps', 20000, 20000)">
-                <td>Handkerchiefs</td><td>Lps</td><td>20,000</td><td>20,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Necklace', '1', 100000, 100000)">
-                <td>Necklace</td><td>1</td><td>100,000</td><td>100,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Hand bag', '1', 100000, 100000)">
-                <td>Hand bag</td><td>1</td><td>100,000</td><td>100,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('metron2')">
-          6. Metron
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="metron2">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Wedding dress', '1', 500000, 500000)">
-                <td>Wedding dress</td><td>1</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Changing', '1', 200000, 200000)">
-                <td>Changing</td><td>1</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', '1', 100000, 100000)">
-                <td>Shoes</td><td>1</td><td>100,000</td><td>100,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('bridesmaid')">
-          7. Bride's Maid
-           <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="bridesmaid">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Wedding dress', '1', 400000, 400000)">
-                <td>Wedding dress</td><td>1</td><td>400,000</td><td>400,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Changing', '1', 200000, 200000)">
-                <td>Changing</td><td>1</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Shoes', '1', 100000, 100000)">
-                <td>Shoes</td><td>1</td><td>100,000</td><td>100,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salon', '1', 300000, 300000)">
-                <td>Salon</td><td>1</td><td>300,000</td><td>300,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Peg boy and flower girl', '2', 100000, 200000)">
-                <td>Peg boy and flower girl</td><td>2</td><td>100,000</td><td>200,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('reception')">
-          8. Reception
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="reception">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Tents', '8', 100000, 800000)">
-                <td>Tents</td><td>8</td><td>100,000</td><td>800,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Decoration', '1', 6500000, 6500000)">
-                <td>Decoration</td><td>1</td><td>6,500,000</td><td>6,500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Sound System', '1', 1000000, 1000000)">
-                <td>Sound System</td><td>1</td><td>1,000,000</td><td>1,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Band', '1', 500000, 500000)">
-                <td>Band</td><td>1</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Video Coverage', '1', 4000000, 4000000)">
-                <td>Video Coverage</td><td>1</td><td>4,000,000</td><td>4,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Master of Ceremony', '1', 500000, 500000)">
-                <td>Master of Ceremony</td><td>1</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Security', '1', 300000, 300000)">
-                <td>Security</td><td>1</td><td>300,000</td><td>300,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Cake', '1', 1000000, 1000000)">
-                <td>Cake</td><td>1</td><td>1,000,000</td><td>1,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Water tank', '1', 300000, 300000)">
-                <td>Water tank</td><td>1</td><td>300,000</td><td>300,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Catering services', '1', 600000, 600000)">
-                <td>Catering services</td><td>1</td><td>600,000</td><td>600,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('food')">
-          9. Food
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="food">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Rice', '200 kg', 4000, 800000)">
-                <td>Rice</td><td>200 kg</td><td>4,000</td><td>800,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Matooke', '40', 25000, 1000000)">
-                <td>Matooke</td><td>40</td><td>25,000</td><td>1,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Yams', 'Lps', 120000, 120000)">
-                <td>Yams</td><td>Lps</td><td>120,000</td><td>120,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Irish', '1 sack', 420000, 420000)">
-                <td>Irish</td><td>1 sack</td><td>420,000</td><td>420,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Kalo', 'Lps', 160000, 160000)">
-                <td>Kalo</td><td>Lps</td><td>160,000</td><td>160,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Chapatti', 'Lps', 200000, 200000)">
-                <td>Chapatti</td><td>Lps</td><td>200,000</td><td>200,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('sauce')">
-          10. Sauce
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="sauce">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Meat/Beef', '200 kgs', 15000, 3000000)">
-                <td>Meat/Beef</td><td>200 kgs</td><td>15,000</td><td>3,000,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Chicken', '30', 25000, 750000)">
-                <td>Chicken</td><td>30</td><td>25,000</td><td>750,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Beans', '40 kgs', 3000, 120000)">
-                <td>Beans</td><td>40 kgs</td><td>3,000</td><td>120,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('G.Nuts', '10', 8000, 80000)">
-                <td>G.Nuts</td><td>10</td><td>8,000</td><td>80,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Greens', 'Lps', 50000, 50000)">
-                <td>Greens</td><td>Lps</td><td>50,000</td><td>50,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Cow peas', 'Lps', 60000, 60000)">
-                <td>Cow peas</td><td>Lps</td><td>60,000</td><td>60,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('spices')">
-          11. Spices
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="spices">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Tomato', '3', 50000, 150000)">
-                <td>Tomato</td><td>3</td><td>50,000</td><td>150,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Catrrots', 'Lps', 30000, 30000)">
-                <td>Catrrots</td><td>Lps</td><td>30,000</td><td>30,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Onions', 'Lps', 100000, 100000)">
-                <td>Onions</td><td>Lps</td><td>100,000</td><td>100,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Salt', 'Lps', 10000, 10000)">
-                <td>Salt</td><td>Lps</td><td>10,000</td><td>10,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Cooking Oil', '40 Ltrs', 7000, 280000)">
-                <td>Cooking Oil</td><td>40 Ltrs</td><td>7,000</td><td>280,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Garlic', 'Lps', 30000, 30000)">
-                <td>Garlic</td><td>Lps</td><td>30,000</td><td>30,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Others', 'Lps', 400000, 400000)">
-                <td>Others</td><td>Lps</td><td>400,000</td><td>400,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Tea leaves', 'Lps', 10000, 10000)">
-                <td>Tea leaves</td><td>Lps</td><td>10,000</td><td>10,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="category">
-        <div class="category-header" onclick="toggleDropdown('ebyokoseza')">
-          12. Ebyokoseza
-          <button class="subtotal-btn">Select From dropdown</button>
-        </div>
-        <div class="dropdown" id="ebyokoseza">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Unit Cost</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr onclick="addToSelectedItems('Firewood', 'Lps', 400000, 400000)">
-                <td>Firewood</td><td>Lps</td><td>400,000</td><td>400,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Transport', 'Lps', 2500000, 2500000)">
-                <td>Transport</td><td>Lps</td><td>2,500,000</td><td>2,500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Soap', '1 box', 60000, 60000)">
-                <td>Soap</td><td>1 box</td><td>60,000</td><td>60,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Sugar', '10 kgs', 5000, 50000)">
-                <td>Sugar</td><td>10 kgs</td><td>5,000</td><td>50,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Water', '30 cartons', 11000, 330000)">
-                <td>Water</td><td>30 cartons</td><td>11,000</td><td>330,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Soda', '30 crates', 20000, 600000)">
-                <td>Soda</td><td>30 crates</td><td>20,000</td><td>600,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Communication', '1', 200000, 200000)">
-                <td>Communication</td><td>1</td><td>200,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Invitation cards', '200', 1000, 200000)">
-                <td>Invitation cards</td><td>200</td><td>1,000</td><td>200,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Entertainment', 'Lps', 500000, 500000)">
-                <td>Entertainment</td><td>Lps</td><td>500,000</td><td>500,000</td>
-              </tr>
-              <tr onclick="addToSelectedItems('Miscellaneous', 'Lps', 1000000, 1000000)">
-                <td>Miscellaneous</td><td>Lps</td><td>1,000,000</td><td>1,000,000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="selected-items-section">
-      <div class="selected-items-title">These are the Items I Have Selected (Pledged or Cleared)</div>
-      <table class="selected-items-table">
+      <table class="w-full text-left border-collapse bg-white rounded-lg shadow-lg">
         <thead>
-          <tr>
-            <th>No</th>
-            <th>Item Selected</th>
-            <th>Qty</th>
-            <th>Unit Cost</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Action</th>
+          <tr class="bg-purple-700 text-white">
+            <th class="p-4">No</th>
+            <th class="p-4">Item</th>
+            <th class="p-4">Qty</th>
+            <th class="p-4">Unit Cost</th>
+            <th class="p-4">Amount</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Action</th>
           </tr>
         </thead>
-        <tbody id="selectedItemsBody">
-        </tbody>
+        <tbody id="selectedItemsBody"></tbody>
         <tfoot>
-          <tr class="total-row">
-            <td colspan="4">TOTAL AMOUNT PLEDGED / CLEARED OR BOTH...</td>
-            <td id="totalAmount"><strong>O</strong></td>
-            <td colspan="2"></td>
+          <tr class="bg-purple-100 font-bold">
+            <td colspan="4" class="p-4">Total Amount</td>
+            <td id="totalAmount" class="p-4">0</td>
+            <td colspan="2" class="p-4"></td>
           </tr>
         </tfoot>
       </table>
+      <div class="text-center mt-8">
+        <button id="toggleFormBtn" class="bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition duration-300">
+          Submit Your Pledge
+        </button>
+      </div>
     </div>
+  </div>
 
-                  <!-- submit -->
-              <Button 
-                 onclick="document.getElementById('formOverlay').style.display='block'; document.getElementById('formFrame').src=
-                   
-                   '   linked source'
-                   
-                   ; return false;"
-                 style="position: absolute; top: 10px; right: 10px; background-color: green; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px;">
-                 SELECTED ITEMS 
-              </Button>
-              <!-- Overlay form container -->
-              <div id="formOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
-                <div style="position:relative; width:90%; height:90%; margin:auto; top:5%; background:#fff; border-radius:8px; overflow:hidden;">
-                  <!-- Close button -->
-                  <a href="#" onclick="document.getElementById('formOverlay').style.display='none'; return false;"
-                     style="position:absolute; top:10px; right:15px; font-size:24px; color:red; text-decoration:none;">&times;</a>
-                  <!-- Embedded form -->
-                  <iframe id="formFrame" style="width:100%; height:100%; border:none;"></iframe>
-                </div>
-              </div>
-
-
-   <div class="form-section">
-      <div class="form-title">Enter your information and send to us</div>
-      <form id="weddingForm">
-        <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input type="text" id="firstName" name="firstName" required>
+  <!-- Form Modal -->
+  <div id="formModal" class="modal-overlay">
+    <div class="modal-content max-w-3xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-purple-700">Submit Your Pledge</h2>
+        <button id="closeFormBtn" class="text-red-500 text-2xl">×</button>
+      </div>
+      <form id="weddingForm" class="bg-white p-8 rounded-lg shadow-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
+            <input type="text" id="firstName" name="firstName" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+          </div>
+          <div>
+            <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
+            <input type="text" id="lastName" name="lastName" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="lastName">Last Name</label>
-          <input type="text" id="lastName" name="lastName" required>
+        <div class="mb-6">
+          <label for="email" class="block text-sm font-medium mb-2">Email</label>
+          <input type="email" id="email" name="email" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
         </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
+        <div class="mb-6">
+          <label for="phone" class="block text-sm font-medium mb-2">Phone</label>
+          <input type="tel" id="phone" name="phone" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
         </div>
-        <div class="form-group">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" required>
+        <div class="mb-6">
+          <label for="location" class="block text-sm font-medium mb-2">Location</label>
+          <input type="text" id="location" name="location" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
         </div>
-        <div class="form-group">
-          <label for="location">Location</label>
-          <input type="text" id="location" name="location" required>
+        <div class="mb-6">
+          <label for="totalSelections" class="block text-sm font-medium mb-2">Total (UGX)</label>
+          <input type="text" id="totalSelections" name="totalSelections" class="w-full p-3 border rounded-lg bg-gray-100" readonly value="0">
         </div>
-        <div class="form-group">
-          <label for="totalSelections">Total (UGX)</label>
-          <input type="text" id="totalSelections" name="totalSelections" readonly value="0">
+        <div class="mb-6">
+          <label for="comment" class="block text-sm font-medium mb-2">Comment</label>
+          <textarea id="comment" name="comment" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" rows="4"></textarea>
         </div>
-        <div class="form-group">
-          <label for="comment">Comment</label>
-          <textarea id="comment" name="comment"></textarea>
-        </div>
-        <button type="submit">I Have Selected that!, so I do Submit</button>
+        <button type="submit" class="w-full bg-purple-700 text-white p-3 rounded-lg hover:bg-purple-800 transition duration-300">Submit Pledge</button>
       </form>
     </div>
   </div>
 
+<!-- Budget Section -->
+<section class="max-w-6xl mx-auto px-4 tight-section">
+  <h2 class="text-3xl font-bold text-center tight-heading fade-in">Pledge Your Support</h2>
+  <p class="text-center tight-subheading text-gray-600">Click on a category to view items and pledge your contribution</p>
+  <div id="categories" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
 
-  <p class = "jimmy2">Contact AGABA JIMMY ON 0785441332 Or meet him in person</p>
-  <footer class="site-footer">
-    &copy; 2025 KAYEERA NATHAN @ Software. All rights reserved.
+<!-- Contact Section -->
+<section class="text-center tight-section">
+  <p class="text-lg">Contact Jimmy Agaba: <a href="tel:+256785441332" class="text-purple-700 hover:underline">+256 785 441 332</a></p>
+  <p class="text-lg">___ Or___  Nabanoba Jenny - Kampala: <a href="tel:+256785441332" class="text-purple-700 hover:underline">+256 785 441 332</a></p>
+</section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white text-center py-6">
+    <p>© 2025 Kayeera Nathan @ Software. All rights reserved.</p>
   </footer>
 
   <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(id);
-      const isOpen = dropdown.style.display === 'block';
-      document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
-      dropdown.style.display = isOpen ? 'none' : 'block';
-    }
+    // Data for categories and items
+    const categoriesData = [
+      { name: "Church", id: "church", items: [
+        { item: "Church Fees", qty: "Lps", unitCost: 220000, amount: 220000 },
+        { item: "Choir", qty: "Lps", unitCost: 250000, amount: 250000 },
+        { item: "Rings", qty: "Lps", unitCost: 200000, amount: 200000 },
+        { item: "Decoration", qty: "Lps", unitCost: 100000, amount: 100000 },
+        { item: "Order of Mass", qty: "Lps", unitCost: 300000, amount: 300000 },
+      ]},
+      { name: "Groom", id: "groom", items: [
+        { item: "Suit y' Omu", qty: "1", unitCost: 500000, amount: 500000 },
+        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
+        { item: "Shoes", qty: "2", unitCost: 100000, amount: 200000 },
+        { item: "Salon", qty: "Lps", unitCost: 20000, amount: 20000 },
+        { item: "Stockings", qty: "Lps", unitCost: 50000, amount: 50000 },
+        { item: "Neck ties", qty: "Lps", unitCost: 40000, amount: 40000 },
+        { item: "Handkerchiefs", qty: "Lps", unitCost: 20000, amount: 20000 },
+      ]},
+      { name: "Best Man", id: "bestman", items: [
+        { item: "Suit for Best Man", qty: "Lps", unitCost: 400000, amount: 400000 },
+        { item: "Changing", qty: "Lps", unitCost: 200000, amount: 200000 },
+        { item: "Shoes", qty: "Lps", unitCost: 200000, amount: 200000 },
+        { item: "Salon", qty: "Lps", unitCost: 10000, amount: 10000 },
+      ]},
+      { name: "Entourage", id: "entourage", items: [
+        { item: "Suits", qty: "6", unitCost: 400000, amount: 2400000 },
+        { item: "Shoes", qty: "6", unitCost: 150000, amount: 900000 },
+        { item: "Salon", qty: "6", unitCost: 6666.67, amount: 40000 },
+      ]},
+      { name: "Bride", id: "metron1", items: [
+        { item: "Wedding gown", qty: "1", unitCost: 1000000, amount: 1000000 },
+        { item: "Changing", qty: "1", unitCost: 500000, amount: 500000 },
+        { item: "Shoes", qty: "1", unitCost: 200000, amount: 200000 },
+        { item: "Salon", qty: "Lps", unitCost: 800000, amount: 800000 },
+        { item: "Handkerchiefs", qty: "Lps", unitCost: 20000, amount: 20000 },
+        { item: "Necklace", qty: "1", unitCost: 100000, amount: 100000 },
+        { item: "Hand bag", qty: "1", unitCost: 100000, amount: 100000 },
+      ]},
+      { name: "Matron", id: "metron2", items: [
+        { item: "Wedding dress", qty: "1", unitCost: 500000, amount: 500000 },
+        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
+        { item: "Shoes", qty: "1", unitCost: 100000, amount: 100000 },
+      ]},
+      { name: "Bride's Maid", id: "bridesmaid", items: [
+        { item: "Wedding dress", qty: "1", unitCost: 400000, amount: 400000 },
+        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
+        { item: "Shoes", qty: "1", unitCost: 100000, amount: 100000 },
+        { item: "Salon", qty: "1", unitCost: 300000, amount: 300000 },
+        { item: "Peg boy and flower girl", qty: "2", unitCost: 100000, amount: 200000 },
+      ]},
+      { name: "Reception", id: "reception", items: [
+        { item: "Tents", qty: "8", unitCost: 100000, amount: 800000 },
+        { item: "Decoration", qty: "1", unitCost: 6500000, amount: 6500000 },
+        { item: "Sound System", qty: "1", unitCost: 1000000, amount: 1000000 },
+        { item: "Band", qty: "1", unitCost: 500000, amount: 500000 },
+        { item: "Video Coverage", qty: "1", unitCost: 4000000, amount: 4000000 },
+        { item: "Master of Ceremony", qty: "1", unitCost: 500000, amount: 500000 },
+        { item: "Security", qty: "1", unitCost: 300000, amount: 300000 },
+        { item: "Cake", qty: "1", unitCost: 1000000, amount: 1000000 },
+        { item: "Water tank", qty: "1", unitCost: 300000, amount: 300000 },
+        { item: "Catering services", qty: "1", unitCost: 600000, amount: 600000 },
+      ]},
+      { name: "Food", id: "food", items: [
+        { item: "Rice", qty: "200 kg", unitCost: 4000, amount: 800000 },
+        { item: "Matooke", qty: "40", unitCost: 25000, amount: 1000000 },
+        { item: "Yams", qty: "Lps", unitCost: 120000, amount: 120000 },
+        { item: "Irish", qty: "1 sack", unitCost: 420000, amount: 420000 },
+        { item: "Kalo", qty: "Lps", unitCost: 160000, amount: 160000 },
+        { item: "Chapatti", qty: "Lps", unitCost: 200000, amount: 200000 },
+      ]},
+      { name: "Sauce", id: "sauce", items: [
+        { item: "Meat/Beef", qty: "200 kgs", unitCost: 15000, amount: 3000000 },
+        { item: "Chicken", qty: "30", unitCost: 25000, amount: 750000 },
+        { item: "Beans", qty: "40 kgs", unitCost: 3000, amount: 120000 },
+        { item: "G.Nuts", qty: "10", unitCost: 8000, amount: 80000 },
+        { item: "Greens", qty: "Lps", unitCost: 50000, amount: 50000 },
+        { item: "Cow peas", qty: "Lps", unitCost: 60000, amount: 60000 },
+      ]},
+      { name: "Spices", id: "spices", items: [
+        { item: "Tomato", qty: "3", unitCost: 50000, amount: 150000 },
+        { item: "Carrots", qty: "Lps", unitCost: 30000, amount: 30000 },
+        { item: "Onions", qty: "Lps", unitCost: 100000, amount: 100000 },
+        { item: "Salt", qty: "Lps", unitCost: 10000, amount: 10000 },
+        { item: "Cooking Oil", qty: "40 Ltrs", unitCost: 7000, amount: 280000 },
+        { item: "Garlic", qty: "Lps", unitCost: 30000, amount: 30000 },
+        { item: "Others", qty: "Lps", unitCost: 400000, amount: 400000 },
+        { item: "Tea leaves", qty: "Lps", unitCost: 10000, amount: 10000 },
+      ]},
+      { name: "Ebyokoseza", id: "ebyokoseza", items: [
+        { item: "Firewood", qty: "Lps", unitCost: 400000, amount: 400000 },
+        { item: "Transport", qty: "Lps", unitCost: 2500000, amount: 2500000 },
+        { item: "Soap", qty: "1 box", unitCost: 60000, amount: 60000 },
+        { item: "Sugar", qty: "10 kgs", unitCost: 5000, amount: 50000 },
+        { item: "Water", qty: "30 cartons", unitCost: 11000, amount: 330000 },
+        { item: "Soda", qty: "30 crates", unitCost: 20000, amount: 600000 },
+        { item: "Communication", qty: "1", unitCost: 200000, amount: 200000 },
+        { item: "Invitation cards", qty: "200", unitCost: 1000, amount: 200000 },
+        { item: "Entertainment", qty: "Lps", unitCost: 500000, amount: 500000 },
+        { item: "Miscellaneous", qty: "Lps", unitCost: 1000000, amount: 1000000 },
+      ]},
+    ];
 
     let selectedItems = [];
 
-    function addToSelectedItems(item, qty, unitCost, amount) {
-      if (selectedItems.some(i => i.item === item && i.qty === qty)) {
-        return;
-      }
+    // Populate categories
+    function populateCategories() {
+      const container = document.getElementById('categories');
+      categoriesData.forEach((category, index) => {
+        const card = document.createElement('div');
+        card.className = 'category-card bg-white p-6 rounded-lg shadow-md cursor-pointer fade-in';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.innerHTML = `
+          <h3 class="text-xl font-bold text-purple-700 mb-4">${category.name}</h3>
+          <button class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition duration-300">View Items</button>
+        `;
+        card.onclick = () => showItems(category);
+        container.appendChild(card);
+      });
+    }
 
+    // Show items in a modal-like overlay
+    function showItems(category) {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay visible';
+      overlay.innerHTML = `
+        <div class="modal-content max-w-4xl">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-purple-700">${category.name}</h2>
+            <button class="text-red-500 text-2xl">×</button>
+          </div>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-purple-100">
+                <th class="p-3">Item</th>
+                <th class="p-3">Quantity</th>
+                <th class="p-3">Unit Cost</th>
+                <th class="p-3">Amount</th>
+                <th class="p-3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${category.items.map(item => `
+                <tr class="border-b">
+                  <td class="p-3">${item.item}</td>
+                  <td class="p-3">${item.qty}</td>
+                  <td class="p-3">${item.unitCost.toLocaleString()}</td>
+                  <td class="p-3">${item.amount.toLocaleString()}</td>
+                  <td class="p-3">
+                    <button class="pledge-btn bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300" onclick="addToSelectedItems('${item.item}', '${item.qty}', ${item.unitCost}, ${item.amount}, this)">Pledge</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      overlay.querySelector('button').onclick = () => overlay.remove();
+      document.body.appendChild(overlay);
+    }
+
+    // Update pledge counter
+    function updatePledgeCounter() {
+      const counter = document.getElementById('pledgeCounter');
+      counter.textContent = `Pledges: ${selectedItems.length}`;
+    }
+
+    // Toggle pledges modal
+    function togglePledgesModal() {
+      const modal = document.getElementById('pledgesModal');
+      modal.classList.toggle('visible');
+      // Close form modal if open
+      document.getElementById('formModal').classList.remove('visible');
+    }
+
+    // Toggle form modal
+    function toggleFormModal() {
+      const modal = document.getElementById('formModal');
+      modal.classList.toggle('visible');
+      // Ensure pledges modal is open
+      document.getElementById('pledgesModal').classList.add('visible');
+    }
+
+    // Close modals
+    function closePledgesModal() {
+      document.getElementById('pledgesModal').classList.remove('visible');
+    }
+
+    function closeFormModal() {
+      document.getElementById('formModal').classList.remove('visible');
+    }
+
+    // Add to selected items
+    window.addToSelectedItems = function(item, qty, unitCost, amount, button) {
+      if (selectedItems.some(i => i.item === item && i.qty === qty)) return;
       selectedItems.push({ item, qty, unitCost, amount, status: 'Pledged' });
       updateSelectedItemsTable();
-    }
+      updatePledgeCounter();
+      // Change button color to green
+      button.classList.remove('bg-red-500', 'hover:bg-red-600');
+      button.classList.add('bg-green-500', 'hover:bg-green-600');
+    };
 
-    function removeItem(index) {
+    // Remove item
+    window.removeItem = function(index) {
       selectedItems.splice(index, 1);
       updateSelectedItemsTable();
+      updatePledgeCounter();
+    };
+
+    // Update item
+    window.updateItem = function(index, field, value) {
+      selectedItems[index][field] = field === 'unitCost' ? parseFloat(value) || 0 : value;
+      updateSelectedItemsTable();
+    };
+
+    // Update status color
+    function updateStatusColor(select) {
+      select.className = `p-2 rounded-lg ${select.value === 'Cleared' ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black'}`;
     }
 
+    // Update selected items table
     function updateSelectedItemsTable() {
       const tbody = document.getElementById('selectedItemsBody');
-      tbody.innerHTML = '';
-
-      selectedItems.forEach((item, index) => {
+      tbody.innerHTML = selectedItems.map((item, index) => {
         const isLps = item.qty === 'Lps';
         const calculatedAmount = isLps ? item.unitCost : (parseFloat(item.qty) || 1) * item.unitCost;
         item.amount = calculatedAmount;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${index + 1}</td>
-          <td><input type="text" value="${item.item}" oninput="updateItem(${index}, 'item', this.value)"></td>
-          <td><input type="text" value="${item.qty}" oninput="updateItem(${index}, 'qty', this.value)"></td>
-          <td><input type="number" value="${item.unitCost}" oninput="updateItem(${index}, 'unitCost', this.value)"></td>
-          <td>${calculatedAmount.toLocaleString()}</td>
-          <td>
-            <select onchange="updateItem(${index}, 'status', this.value); updateStatusColor(this)">
-              <option value="Cleared" ${item.status === 'Cleared' ? 'selected' : ''}>Cleared</option>
-              <option value="Pledged" ${item.status === 'Pledged' ? 'selected' : ''}>Pledged</option>
-            </select>
-          </td>
-          <td><button class="remove-btn" onclick="removeItem(${index})">Remove</button></td>
+        return `
+          <tr class="border-b">
+            <td class="p-4">${index + 1}</td>
+            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="text" value="${item.item}" oninput="updateItem(${index}, 'item', this.value)"></td>
+            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="text" value="${item.qty}" oninput="updateItem(${index}, 'qty', this.value)"></td>
+            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="number" value="${item.unitCost}" oninput="updateItem(${index}, 'unitCost', this.value)"></td>
+            <td class="p-4">${calculatedAmount.toLocaleString()}</td>
+            <td class="p-4">
+              <select class="p-2 rounded-lg" onchange="updateItem(${index}, 'status', this.value); updateStatusColor(this)">
+                <option value="Cleared" ${item.status === 'Cleared' ? 'selected' : ''}>Cleared</option>
+                <option value="Pledged" ${item.status === 'Pledged' ? 'selected' : ''}>Pledged</option>
+              </select>
+            </td>
+            <td class="p-4">
+              <button class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300" onclick="removeItem(${index})">Remove</button>
+            </td>
+          </tr>
         `;
-        tbody.appendChild(row);
-      });
+      }).join('');
 
-      document.querySelectorAll('.selected-items-table select').forEach(select => {
-        updateStatusColor(select);
-      });
-
+      document.querySelectorAll('select').forEach(updateStatusColor);
       updateTotalSelections();
     }
 
-    function updateItem(index, field, value) {
-      selectedItems[index][field] = field === 'unitCost' ? parseFloat(value) || 0 : value;
-      updateSelectedItemsTable();
-    }
-
-    function updateStatusColor(select) {
-      select.className = select.value === 'Cleared' ? 'cleared' : 'pledged';
-    }
-
+    // Update total selections
     function updateTotalSelections() {
       const total = selectedItems.reduce((sum, item) => {
         const isLps = item.qty === 'Lps';
@@ -1079,6 +489,7 @@
       document.getElementById('totalSelections').value = total.toLocaleString();
     }
 
+    // Form submission
     document.getElementById('weddingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1088,28 +499,25 @@
       fields.forEach(field => {
         const input = document.getElementById(field);
         if (!input.value.trim()) {
-          input.classList.add('error');
-          input.classList.remove('valid');
+          input.classList.add('border-red-500');
           isValid = false;
         } else {
-          input.classList.remove('error');
-          input.classList.add('valid');
+          input.classList.remove('border-red-500');
+          input.classList.add('border-green-500');
         }
       });
 
       const email = document.getElementById('email');
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(email.value)) {
-        email.classList.add('error');
-        email.classList.remove('valid');
+        email.classList.add('border-red-500');
         isValid = false;
       }
 
       const phone = document.getElementById('phone');
       const phonePattern = /^\+?\d{10,14}$/;
       if (!phonePattern.test(phone.value)) {
-        phone.classList.add('error');
-        phone.classList.remove('valid');
+        phone.classList.add('border-red-500');
         isValid = false;
       }
 
@@ -1129,8 +537,6 @@
         formData.append('comment', document.getElementById('comment').value);
         formData.append('selectedItems', JSON.stringify(selectedItems));
 
-        console.log('Submitting form data:', Object.fromEntries(formData));
-
         try {
           const response = await fetch('https://script.google.com/macros/s/AKfycbz8crr3bKTNMyude69r4Yzm1E77ke657EaO3pvHNFy-91lqav-GPuKx7DrPgS3gKQct/exec', {
             method: 'POST',
@@ -1138,19 +544,19 @@
             mode: 'cors'
           });
           const result = await response.json();
-          console.log('Server response:', result);
           if (result.result === 'success') {
-            alert('Thank you for supporting Agaba Jimmy! You pledg has been sent to the database.Total Budget Selected is: ' + document.getElementById('totalSelections').value + ' UGX');
+            alert('Thank you for supporting Agaba Jimmy! Your pledge has been sent. Total Budget Selected: ' + document.getElementById('totalSelections').value + ' UGX');
             document.getElementById('weddingForm').reset();
-            fields.forEach(field => document.getElementById(field).classList.remove('valid'));
+            fields.forEach(field => document.getElementById(field).classList.remove('border-green-500'));
             selectedItems = [];
             updateSelectedItemsTable();
+            updatePledgeCounter();
+            closeFormModal();
+            closePledgesModal();
           } else {
-            console.error('Submission error:', result.error);
             alert('Error submitting form: ' + result.error);
           }
         } catch (error) {
-          console.error('Fetch error:', error);
           alert('Error submitting form: ' + error.message);
         }
       } else {
@@ -1158,18 +564,31 @@
       }
     });
 
-            // Slider
-        let slideIndex = 0;
-        function showSlides() {
-            try {
-                const slides = document.querySelector('.slides');
-                const totalSlides = document.querySelectorAll('.slides > *').length;
-                slideIndex = (slideIndex + 1) % totalSlides;
-                slides.style.transform = `translateX(-${slideIndex * 100}%)`;
-            } catch (error) {
-                showToast('Error in slider: ' + error.message, 'error');
-            }
-        }
+    // Slider
+    let slideIndex = 0;
+    function showSlides() {
+      try {
+        const slides = document.querySelector('.slides');
+        const totalSlides = document.querySelectorAll('.slides > *').length;
+        slideIndex = (slideIndex + 1) % totalSlides;
+        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+      } catch (error) {
+        console.error('Slider error:', error);
+      }
+    }
+
+    // Initialize
+    populateCategories();
+    setInterval(showSlides, 5000);
+
+    // Event listeners
+    document.getElementById('togglePledgesBtn').addEventListener('click', togglePledgesModal);
+    document.getElementById('toggleFormBtn').addEventListener('click', toggleFormModal);
+    document.getElementById('closePledgesBtn').addEventListener('click', closePledgesModal);
+    document.getElementById('closeFormBtn').addEventListener('click', closeFormModal);
+
+    // Initial pledge counter update
+    updatePledgeCounter();
   </script>
 </body>
 </html>
