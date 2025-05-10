@@ -62,16 +62,22 @@
 }
 .modal-overlay {
   position: fixed;
-  top: 250px; /* Offset to start below fixed header */
+  top: 200px; /* Default for larger screens */
   bottom: 0;
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
   display: none;
-  align-items: flex-start; /* Align content at the top */
+  align-items: flex-start;
   justify-content: center;
   z-index: 999;
-  padding-top: 1rem; /* Additional padding for spacing */
+  padding-top: 1rem;
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    top: 110px; /* Adjust to match mobile header height */
+  }
 }
 .modal-overlay.visible {
   display: flex;
