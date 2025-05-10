@@ -40,64 +40,120 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
     }
-    .fixed-button {
-      position: fixed;
-      top: 120px;
-      right: 20px;
-      z-index: 1001; /* Above header */
-    }
-    .pledge-counter {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      z-index: 1001; /* Above header */
-      background: #ffffff;
-      color: #2d1b4e;
-      padding: 8px 12px;
-      border-radius: 9999px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .modal-overlay {
-      position: fixed;
-      top: 200px; /* Offset to start below fixed header */
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: flex-start; /* Align content at the top */
-      justify-content: center;
-      z-index: 999;
-      padding-top: 1rem; /* Additional padding for spacing */
-    }
-    .modal-overlay.visible {
-      display: flex;
-    }
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      max-width: 90%;
-      max-height: calc(100vh - 200px); /* Adjust for header and padding */
-      overflow-y: auto;
-      position: relative;
-    }
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: linear-gradient(to right, #6b21a8, #db2777);
-      color: white;
-      text-align: center;
-      padding: 1.5rem;
-      .slider-container {
-    margin-top: 120px; /* Offset to start below fixed header */
+/* General Styling */
+.fixed-button {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  z-index: 1001; /* Above header */
+}
+.pledge-counter {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 1001; /* Above header */
+  background: #ffffff;
+  color: #2d1b4e;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.modal-overlay {
+  position: fixed;
+  top: 200px; /* Offset to start below fixed header */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: flex-start; /* Align content at the top */
+  justify-content: center;
+  z-index: 999;
+  padding-top: 1rem; /* Additional padding for spacing */
+}
+.modal-overlay.visible {
+  display: flex;
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 90%;
+  max-height: calc(100vh - 200px); /* Adjust for header and padding */
+  overflow-y: auto;
+  position: relative;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(to right, #6b21a8, #db2777);
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+}
+.slider-container {
+  margin-top: 120px; /* Offset to start below fixed header */
+}
+
+/* Media Queries for Responsiveness */
+
+/* Small Screen Devices (phones) */
+@media (max-width: 480px) {
+  .fixed-button {
+    top: 90px; /* Adjust position for smaller screen */
+    right: 15px;
   }
-    }
+
+  .pledge-counter {
+    top: 50px; /* Adjust top position */
+    font-size: 0.8rem; /* Smaller font size */
+    padding: 6px 10px; /* Reduce padding */
+  }
+
+  .modal-overlay {
+    top: 150px; /* Adjust top to make modal accessible */
+  }
+
+  header {
+    padding: 1rem; /* Smaller padding for header */
+  }
+
+  .slider-container {
+    margin-top: 80px; /* Reduce margin for smaller screens */
+  }
+}
+
+/* Larger Screen Devices (tablets, etc.) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .fixed-button {
+    top: 100px;
+    right: 20px;
+  }
+
+  .pledge-counter {
+    top: 60px;
+    font-size: 0.85rem;
+    padding: 7px 11px;
+  }
+
+  .modal-overlay {
+    top: 180px;
+  }
+
+  header {
+    padding: 1.2rem;
+  }
+
+  .slider-container {
+    margin-top: 100px;
+  }
+}
+
   </style>
 </head>
 <body class="min-h-screen">
