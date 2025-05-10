@@ -41,23 +41,44 @@
       50% { transform: scale(1.1); }
     }
     .fixed-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1001; /* Above header */
-    }
-    .pledge-counter {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      z-index: 1001; /* Above header */
-      background: #ffffff;
-      color: #2d1b4e;
-      padding: 8px 12px;
-      border-radius: 9999px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 0.9rem;
-      font-weight: 600;
+  position: fixed;
+  top: 120px;
+  right: 140px; /* Leave room for pledge-counter */
+  z-index: 1001;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow-x: auto;
+
+}
+
+.pledge-counter {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  z-index: 1001;
+  background: #ffffff;
+  color: #2d1b4e;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow-x: auto;
+
+}
+
+@media (max-width: 480px) {
+  .fixed-button {
+    top: 160px; /* Stack it below the counter on mobile */
+    right: 20px;
+  }
+  .pledge-counter {
+    top: 120px;
+  }
+}
+
     }
     .modal-overlay {
       position: fixed;
