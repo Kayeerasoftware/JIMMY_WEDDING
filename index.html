@@ -43,9 +43,16 @@
 /* General Styling */
 .fixed-button {
   position: fixed;
-  top: 120px;
+  top: 120px; /* Default for larger screens */
   right: 20px;
   z-index: 1001; /* Above header */
+}
+
+@media (max-width: 480px) {
+  .fixed-button {
+    top: 110px; /* Adjust based on the smaller header height */
+    right: 15px;
+  }
 }
 .pledge-counter {
   position: fixed;
