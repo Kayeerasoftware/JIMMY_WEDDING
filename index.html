@@ -3,661 +3,2055 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jimmy & Joster Wedding Budget</title>
+  <title>JIMMY WEDS JOSTER</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f8f1f5, #fff1f7);
-      color: #2d1b4e;
-      padding-top: 120px; /* Offset for fixed header */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .category-card {
+    .nav-btn {
       transition: all 0.3s ease;
     }
-    .category-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    .tab-active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-weight: 600;
     }
-    .fade-in {
-      animation: fadeIn 1s ease-in-out;
+    .tab-inactive {
+      color: #a0aec0;
     }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+    .tab-inactive:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
     }
-    .slide {
-      flex: 0 0 100%;
+    .progress-bar {
+      background: linear-gradient(to right, #ec4899, #8b5cf6);
     }
-    .heart-pulse {
-      animation: heartPulse 2s infinite;
+    .status-balance { background-color: #ed8936; }
+    .status-cleared { background-color: #48bb78; }
+    .status-pending { background-color: #4299e1; }
+    
+    #notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      transform: translateX(120%);
+      transition: transform 0.5s ease-in-out;
+      z-index: 1000;
     }
-    @keyframes heartPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+    #notification.show {
+      transform: translateX(0);
     }
-/* General Styling */
-.fixed-button {
-  position: fixed;
-  top: 120px; /* Default for larger screens */
-  right: 20px;
-  z-index: 1001; /* Above header */
-}
 
-@media (max-width: 480px) {
-  .fixed-button {
-    top: 110px; /* Adjust based on the smaller header height */
-    right: 15px;
-  }
-}
-.pledge-counter {
-  position: fixed;
-  top: 70px;
-  right: 20px;
-  z-index: 1001; /* Above header */
-  background: #ffffff;
-  color: #2d1b4e;
-  padding: 8px 12px;
-  border-radius: 9999px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.modal-overlay {
-  position: fixed;
-  top: 200px; /* Default for larger screens */
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: none;
-  align-items: flex-start;
-  justify-content: center;
-  z-index: 999;
-  padding-top: 1rem;
-}
-
-@media (max-width: 480px) {
-  .modal-overlay {
-    top: 110px; /* Adjust to match mobile header height */
-  }
-}
-.modal-overlay.visible {
-  display: flex;
-}
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  max-width: 90%;
-  max-height: calc(100vh - 200px); /* Adjust for header and padding */
-  overflow-y: auto;
-  position: relative;
-}
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: linear-gradient(to right, #6b21a8, #db2777);
-  color: white;
-  text-align: center;
-  padding: 1.5rem;
-}
-.slider-container {
-  margin-top: 120px; /* Offset to start below fixed header */
-}
-
-/* Media Queries for Responsiveness */
-
-/* Small Screen Devices (phones) */
-@media (max-width: 480px) {
-  .fixed-button {
-    top: 90px; /* Adjust position for smaller screen */
-    right: 15px;
-  }
-
-  .pledge-counter {
-    top: 50px; /* Adjust top position */
-    font-size: 0.8rem; /* Smaller font size */
-    padding: 6px 10px; /* Reduce padding */
-  }
-
-  .modal-overlay {
-    top: 150px; /* Adjust top to make modal accessible */
-  }
-
-  header {
-    padding: 1rem; /* Smaller padding for header */
-  }
-
-  .slider-container {
-    margin-top: 80px; /* Reduce margin for smaller screens */
-  }
-}
-
-/* Larger Screen Devices (tablets, etc.) */
-@media (min-width: 481px) and (max-width: 768px) {
-  .fixed-button {
-    top: 100px;
-    right: 20px;
-  }
-
-  .pledge-counter {
-    top: 60px;
-    font-size: 0.85rem;
-    padding: 7px 11px;
-  }
-
-  .modal-overlay {
-    top: 180px;
-  }
-
-  header {
-    padding: 1.2rem;
-  }
-
-  .slider-container {
-    margin-top: 100px;
-  }
-}
-
+    input[type="checkbox"]:checked ~ .dot {
+      transform: translateX(100%);
+      background-color: #8b5cf6;
+    }
   </style>
 </head>
-<body class="min-h-screen">
-  <!-- Fixed Header -->
-  <header>
-    <h1 class="text-4xl md:text-5xl font-bold mb-2">Jimmy & Joster's Wedding</h1>
-    <p class="text-lg md:text-xl">July 5th, 2025</p>
-    <p class="mt-4 text-sm animate-pulse">Thank you for supporting our journey of love 💖</p>
-  </header>
+<body class="bg-gray-900 text-white font-sans">
 
-  <!-- Fixed Button for Your Pledges -->
-  <button id="togglePledgesBtn" class="fixed-button bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-800 transition duration-300">
-    Your Pledges
-  </button>
-  <!-- Pledge Counter -->
-  <div id="pledgeCounter" class="pledge-counter">Pledges: 0</div>
-
-  <!-- Slider -->
-  <div class="slider-container max-w-6xl mx-auto my-8 overflow-hidden rounded-lg shadow-lg">
-    <div class="slides flex transition-transform duration-500">
-      <img src="Jimmy1-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <video src="Jimmy1-vid.mp4" muted autoplay loop class="slide w-full h-96 object-cover"></video>
-      <img src="Jimmy4-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <img src="Jimmy3-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <img src="Jimmy6-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <img src="Jimmy5-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <img src="Jimmy2-min.jpg" alt="You are really missing" class="slide w-full h-96 object-cover">
-      <img src="Jimmy7-min.jpeg" alt="You are really missing" class="slide w-full h-96 object-cover">
+  <div class="relative min-h-screen md:flex">
+    <!-- Mobile menu button -->
+    <div class="bg-gray-900 text-gray-100 flex justify-between items-center md:hidden sticky top-0 z-10 p-2">
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-full bg-black bg-opacity-20 border-2 border-white border-opacity-10 flex items-center justify-center flex-shrink-0">
+          <img class="w-full h-full object-cover rounded-full" src="Jimmy4-min.jpg" alt="Jimmy & Joster">
+        </div>
+        <a href="#" class="p-2 text-white font-bold">JIMMY WEDS JOSTER</a>
+      </div>
+      <button id="mobile-menu-button" class="p-4 focus:outline-none focus:bg-gray-700">
+        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
-  </div>
 
-  <!-- Your Pledges Modal -->
-  <div id="pledgesModal" class="modal-overlay">
-    <div class="modal-content max-w-6xl">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-purple-700">Your Pledges</h2>
-        <p >(Your can edit Item, Qty	and Unit Cost)</p>
-        <button id="closePledgesBtn" class="text-red-500 text-2xl">×</button>
-      </div>
-      <table class="w-full text-left border-collapse bg-white rounded-lg shadow-lg">
-        <thead>
-          <tr class="bg-purple-700 text-white">
-            <th class="p-4">No</th>
-            <th class="p-4">Item</th>
-            <th class="p-4">Qty</th>
-            <th class="p-4">Unit Cost</th>
-            <th class="p-4">Amount</th>
-            <th class="p-4">Status</th>
-            <th class="p-4">Action</th>
-          </tr>
-        </thead>
-        <tbody id="selectedItemsBody"></tbody>
-        <tfoot>
-          <tr class="bg-purple-100 font-bold">
-            <td colspan="4" class="p-4">Total Amount</td>
-            <td id="totalAmount" class="p-4">0</td>
-            <td colspan="2" class="p-4"></td>
-          </tr>
-        </tfoot>
-      </table>
-      <div class="text-center mt-8">
-        <button id="toggleFormBtn" class="bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition duration-300">
-          Submit Your Pledge
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Form Modal -->
-  <div id="formModal" class="modal-overlay">
-    <div class="modal-content max-w-3xl">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-purple-700">Submit Your Pledge</h2>
-        <button id="closeFormBtn" class="text-red-500 text-2xl">×</button>
-      </div>
-      <form id="weddingForm" class="bg-white p-8 rounded-lg shadow-lg">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
-            <input type="text" id="firstName" name="firstName" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
-          </div>
-          <div>
-            <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
-            <input type="text" id="lastName" name="lastName" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 p-6 glass flex-col justify-between transform -translate-x-full md:relative md:translate-x-0 md:flex transition-transform duration-200 ease-in-out">
+      <div>
+        <div class="text-center mb-8">
+          <div class="w-24 h-24 rounded-full mx-auto bg-black bg-opacity-20 border-2 border-white border-opacity-10 flex items-center justify-center">
+            <!-- Placeholder for couple's photo -->
+            <img class="w-full h-full object-cover rounded-full" src="Jimmy4-min.jpg" alt="Jimmy & Joster">
           </div>
         </div>
-        <div class="mb-6">
-          <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <input type="email" id="email" name="email" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+        <h1 class="text-2xl font-bold text-center mb-10 hidden md:block">JIMMY<br/>WEDS<br/>JOSTER</h1>
+        <div class="space-y-2">
+          <button onclick="switchTab('dashboard')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-active">Dashboard</button>
+          <button onclick="switchTab('pledges')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Pledges</button>
+          <button onclick="switchTab('attendees')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Attendees</button>
+          <button onclick="switchTab('budget')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Budget</button>
+          <button onclick="switchTab('analytics')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Analytics</button>
+          <button onclick="switchTab('admin')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Admin</button>
         </div>
-        <div class="mb-6">
-          <label for="phone" class="block text-sm font-medium mb-2">Phone</label>
-          <input type="tel" id="phone" name="phone" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+      </div>
+      <div class="text-center text-xs text-gray-400 hidden md:block">
+        <p>&copy; <span class="footer-year"></span> All Rights Reserved.</p>
+        <p class="mt-1">+256 779 116 709</p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+      <!-- Dashboard Tab -->
+      <div id="dashboard-tab" class="tab-content">
+        <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Budget</p><p id="totalBudget" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Pledged</p><p id="totalPledged" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Cleared</p><p id="totalCleared" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Remaining</p><p id="totalRemaining" class="text-2xl font-bold"></p></div>
         </div>
-        <div class="mb-6">
-          <label for="location" class="block text-sm font-medium mb-2">Location</label>
-          <input type="text" id="location" name="location" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" required>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 p-6 glass rounded-xl">
+            <h3 class="text-xl font-semibold mb-4">Budget Progress</h3>
+            <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+              <div id="progressBar" class="h-4 rounded-full progress-bar"></div>
+            </div>
+            <p class="text-right text-gray-300"><span id="budgetCovered"></span> of budget covered</p>
+          </div>
+          <div class="p-6 glass rounded-xl text-center">
+            <p class="text-lg font-semibold">Countdown</p>
+            <p id="daysRemaining" class="text-3xl font-bold"></p>
+          </div>
         </div>
-        <div class="mb-6">
-          <label for="totalSelections" class="block text-sm font-medium mb-2">Total (UGX)</label>
-          <input type="text" id="totalSelections" name="totalSelections" class="w-full p-3 border rounded-lg bg-gray-100" readonly value="0">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
+          <div class="lg:col-span-3 p-6 glass rounded-xl">
+            <h3 class="text-xl font-semibold mb-4">Recent Pledges</h3>
+            <div id="recentPledges" class="space-y-4"></div>
+          </div>
+          <div class="lg:col-span-2 p-6 glass rounded-xl">
+            <h3 class="text-xl font-semibold mb-4">Pledge Status</h3>
+            <div class="h-64"><canvas id="pledgeChart"></canvas></div>
+          </div>
         </div>
-        <div class="mb-6">
-          <label for="comment" class="block text-sm font-medium mb-2">Comment</label>
-          <textarea id="comment" name="comment" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500" rows="4"></textarea>
+      </div>
+
+      <!-- Pledges Tab -->
+      <div id="pledges-tab" class="tab-content hidden">
+        <h2 class="text-3xl font-bold mb-6">Pledges</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="p-6 glass rounded-xl text-center"><p class="text-lg text-gray-300">Balance</p><p id="balanceCount" class="text-3xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl text-center"><p class="text-lg text-gray-300">Cleared</p><p id="clearedCount" class="text-3xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl text-center"><p class="text-lg text-gray-300">Pending</p><p id="pendingCount" class="text-3xl font-bold"></p></div>
         </div>
-        <button type="submit" class="w-full bg-purple-700 text-white p-3 rounded-lg hover:bg-purple-800 transition duration-300">Submit Pledge</button>
+        <div class="p-6 glass rounded-xl">
+          <div class="flex justify-between items-center mb-4">
+            <input id="searchPledges" type="text" placeholder="Search pledges..." class="p-2 glass rounded border border-white border-opacity-20">
+            <select id="statusFilter" class="p-2 glass rounded border border-white border-opacity-20 bg-gray-800">
+              <option value="all">All Statuses</option>
+              <option value="balance">Balance</option>
+              <option value="cleared">Cleared</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">ID</th><th class="p-4">Name</th><th class="p-4">Items</th><th class="p-4">Amount</th><th class="p-4">Status</th><th class="p-4">Date</th><th class="p-4">Actions</th></tr></thead>
+              <tbody id="pledgesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Attendees Tab -->
+      <div id="attendees-tab" class="tab-content hidden">
+        <h2 class="text-3xl font-bold mb-6">Attendees</h2>
+        <div class="p-6 glass rounded-xl">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-white">Guest List</h3>
+            <button onclick="openAttendeeForm()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Register to Attend</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b border-white border-opacity-20">
+                  <th class="p-4">ID</th>
+                  <th class="p-4">Name</th>
+                  <th class="p-4">Location</th>
+                  <th class="p-4">Group Size</th>
+                </tr>
+              </thead>
+              <tbody id="attendeesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Tab -->
+      <div id="budget-tab" class="tab-content hidden">
+        <h2 class="text-3xl font-bold mb-6">Budget Items</h2>
+        <div id="pledge-summary-container" class="mb-6"></div>
+        <div id="budgetCategories" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+      
+      <!-- Analytics Tab -->
+      <div id="analytics-tab" class="tab-content hidden">
+        <h2 class="text-3xl font-bold mb-6">Advanced Analytics</h2>
+        
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Pledge to Budget Ratio</p><p id="analyticsPledgeToBudgetRatio" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Cleared vs Pledged</p><p id="analyticsClearedToPledgedRatio" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Average Pledge</p><p id="analyticsAveragePledge" class="text-2xl font-bold"></p></div>
+          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Contributors</p><p id="analyticsTotalContributors" class="text-2xl font-bold"></p></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="p-6 glass rounded-xl">
+              <h3 class="text-xl font-semibold mb-4">Pledge Status by Amount</h3>
+              <div class="h-80"><canvas id="statusAmountChart"></canvas></div>
+            </div>
+            <div class="p-6 glass rounded-xl">
+              <h3 class="text-xl font-semibold mb-4">Pledge Amount Tiers</h3>
+              <div class="h-80"><canvas id="amountTiersChart"></canvas></div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div class="p-6 glass rounded-xl">
+            <h3 class="text-xl font-semibold mb-4">Cumulative Pledge Trend</h3>
+            <div class="h-80"><canvas id="trendChart"></canvas></div>
+          </div>
+          <div class="p-6 glass rounded-xl">
+              <h3 class="text-xl font-semibold mb-4">Budget by Category</h3>
+              <div class="h-80"><canvas id="categoryChart"></canvas></div>
+          </div>
+        </div>
+      
+        <div class="mt-6 p-6 glass rounded-xl">
+          <h3 class="text-xl font-semibold mb-4">Top 10 Contributors</h3>
+          <div id="topContributors" class="space-y-4"></div>
+        </div>
+      </div>
+
+      <!-- Admin Tab -->
+      <div id="admin-tab" class="tab-content hidden">
+          <h2 class="text-3xl font-bold mb-6">Admin Panel</h2>
+          <div id="admin-content"></div>
+      </div>
+
+      <!-- Mobile Footer -->
+      <div class="text-center text-xs text-gray-400 mt-8 block md:hidden">
+        <p>&copy; <span class="footer-year"></span> All Rights Reserved.</p>
+        <p class="mt-1">+256 779 116 709</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="pledgeModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
+    <div id="pledgeModalContent" class="glass rounded-xl p-8 max-w-lg w-full"></div>
+  </div>
+  <div id="statusUpdateModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden">
+    <div id="statusUpdateModalContent" class="glass rounded-xl p-8 max-w-md w-full"></div>
+  </div>
+  
+  <div id="attendeeFormModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-40">
+    <div class="glass rounded-xl p-8 max-w-lg w-full">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-white">Register Your Attendance</h3>
+        <button onclick="closeModal('attendeeFormModal')" class="text-white text-3xl font-bold">&times;</button>
+      </div>
+      <form id="attendeeForm" class="space-y-4">
+        <input id="attendeeName" type="text" placeholder="Full Name" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+        <input id="attendeeLocation" type="text" placeholder="Location (e.g., Kampala)" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+        <input id="attendeeGroupSize" type="number" placeholder="How many are you? (including yourself)" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" min="1" required>
+        <button type="submit" class="w-full mt-4 p-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-purple-700">Confirm Attendance</button>
       </form>
     </div>
   </div>
 
-<!-- Budget Section -->
-<section class="max-w-6xl mx-auto px-4 tight-section">
-  <h2 class="text-3xl font-bold text-center tight-heading fade-in">Pledge Your Support</h2>
-  <p class="text-center tight-subheading text-gray-600">Click on a category to view items and pledge your contribution</p>
-  <div id="categories" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-</section>
-
-<!-- Contact Section -->
-<section class="text-center tight-section">
-  <p class="text-lg">Contact Jimmy Agaba: <a href="tel:+256785441332" class="text-purple-700 hover:underline">+256 785 441 332</a></p>
-  <p class="text-lg">___ Or___  Nabanoba Jenny - Kampala: <a href="tel:+256785441332" class="text-purple-700 hover:underline">+256 785 441 332</a></p>
-</section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white text-center py-6">
-    <p>© 2025 Kayeera Nathan @ Software. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Data for categories and items
-    const categoriesData = [
-      { name: "Church", id: "church", items: [
-        { item: "Church Fees", qty: "Lps", unitCost: 220000, amount: 220000 },
-        { item: "Choir", qty: "Lps", unitCost: 250000, amount: 250000 },
-        { item: "Rings", qty: "Lps", unitCost: 200000, amount: 200000 },
-        { item: "Decoration", qty: "Lps", unitCost: 100000, amount: 100000 },
-        { item: "Order of Mass", qty: "Lps", unitCost: 300000, amount: 300000 },
-      ]},
-      { name: "Groom", id: "groom", items: [
-        { item: "Suit y' Omu", qty: "1", unitCost: 500000, amount: 500000 },
-        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
-        { item: "Shoes", qty: "2", unitCost: 100000, amount: 200000 },
-        { item: "Salon", qty: "Lps", unitCost: 20000, amount: 20000 },
-        { item: "Stockings", qty: "Lps", unitCost: 50000, amount: 50000 },
-        { item: "Neck ties", qty: "Lps", unitCost: 40000, amount: 40000 },
-        { item: "Handkerchiefs", qty: "Lps", unitCost: 20000, amount: 20000 },
-      ]},
-      { name: "Best Man", id: "bestman", items: [
-        { item: "Suit for Best Man", qty: "Lps", unitCost: 400000, amount: 400000 },
-        { item: "Changing", qty: "Lps", unitCost: 200000, amount: 200000 },
-        { item: "Shoes", qty: "Lps", unitCost: 200000, amount: 200000 },
-        { item: "Salon", qty: "Lps", unitCost: 10000, amount: 10000 },
-      ]},
-      { name: "Entourage", id: "entourage", items: [
-        { item: "Suits", qty: "6", unitCost: 400000, amount: 2400000 },
-        { item: "Shoes", qty: "6", unitCost: 150000, amount: 900000 },
-        { item: "Salon", qty: "6", unitCost: 6666.67, amount: 40000 },
-      ]},
-      { name: "Bride", id: "metron1", items: [
-        { item: "Wedding gown", qty: "1", unitCost: 1000000, amount: 1000000 },
-        { item: "Changing", qty: "1", unitCost: 500000, amount: 500000 },
-        { item: "Shoes", qty: "1", unitCost: 200000, amount: 200000 },
-        { item: "Salon", qty: "Lps", unitCost: 800000, amount: 800000 },
-        { item: "Handkerchiefs", qty: "Lps", unitCost: 20000, amount: 20000 },
-        { item: "Necklace", qty: "1", unitCost: 100000, amount: 100000 },
-        { item: "Hand bag", qty: "1", unitCost: 100000, amount: 100000 },
-      ]},
-      { name: "Matron", id: "metron2", items: [
-        { item: "Wedding dress", qty: "1", unitCost: 500000, amount: 500000 },
-        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
-        { item: "Shoes", qty: "1", unitCost: 100000, amount: 100000 },
-      ]},
-      { name: "Bride's Maid", id: "bridesmaid", items: [
-        { item: "Wedding dress", qty: "1", unitCost: 400000, amount: 400000 },
-        { item: "Changing", qty: "1", unitCost: 200000, amount: 200000 },
-        { item: "Shoes", qty: "1", unitCost: 100000, amount: 100000 },
-        { item: "Salon", qty: "1", unitCost: 300000, amount: 300000 },
-        { item: "Peg boy and flower girl", qty: "2", unitCost: 100000, amount: 200000 },
-      ]},
-      { name: "Reception", id: "reception", items: [
-        { item: "Tents", qty: "8", unitCost: 100000, amount: 800000 },
-        { item: "Decoration", qty: "1", unitCost: 6500000, amount: 6500000 },
-        { item: "Sound System", qty: "1", unitCost: 1000000, amount: 1000000 },
-        { item: "Band", qty: "1", unitCost: 500000, amount: 500000 },
-        { item: "Video Coverage", qty: "1", unitCost: 4000000, amount: 4000000 },
-        { item: "Master of Ceremony", qty: "1", unitCost: 500000, amount: 500000 },
-        { item: "Security", qty: "1", unitCost: 300000, amount: 300000 },
-        { item: "Cake", qty: "1", unitCost: 1000000, amount: 1000000 },
-        { item: "Water tank", qty: "1", unitCost: 300000, amount: 300000 },
-        { item: "Catering services", qty: "1", unitCost: 600000, amount: 600000 },
-      ]},
-      { name: "Food", id: "food", items: [
-        { item: "Rice", qty: "200 kg", unitCost: 4000, amount: 800000 },
-        { item: "Matooke", qty: "40", unitCost: 25000, amount: 1000000 },
-        { item: "Yams", qty: "Lps", unitCost: 120000, amount: 120000 },
-        { item: "Irish", qty: "1 sack", unitCost: 420000, amount: 420000 },
-        { item: "Kalo", qty: "Lps", unitCost: 160000, amount: 160000 },
-        { item: "Chapatti", qty: "Lps", unitCost: 200000, amount: 200000 },
-      ]},
-      { name: "Sauce", id: "sauce", items: [
-        { item: "Meat/Beef", qty: "200 kgs", unitCost: 15000, amount: 3000000 },
-        { item: "Chicken", qty: "30", unitCost: 25000, amount: 750000 },
-        { item: "Beans", qty: "40 kgs", unitCost: 3000, amount: 120000 },
-        { item: "G.Nuts", qty: "10", unitCost: 8000, amount: 80000 },
-        { item: "Greens", qty: "Lps", unitCost: 50000, amount: 50000 },
-        { item: "Cow peas", qty: "Lps", unitCost: 60000, amount: 60000 },
-      ]},
-      { name: "Spices", id: "spices", items: [
-        { item: "Tomato", qty: "3", unitCost: 50000, amount: 150000 },
-        { item: "Carrots", qty: "Lps", unitCost: 30000, amount: 30000 },
-        { item: "Onions", qty: "Lps", unitCost: 100000, amount: 100000 },
-        { item: "Salt", qty: "Lps", unitCost: 10000, amount: 10000 },
-        { item: "Cooking Oil", qty: "40 Ltrs", unitCost: 7000, amount: 280000 },
-        { item: "Garlic", qty: "Lps", unitCost: 30000, amount: 30000 },
-        { item: "Others", qty: "Lps", unitCost: 400000, amount: 400000 },
-        { item: "Tea leaves", qty: "Lps", unitCost: 10000, amount: 10000 },
-      ]},
-      { name: "Ebyokoseza", id: "ebyokoseza", items: [
-        { item: "Firewood", qty: "Lps", unitCost: 400000, amount: 400000 },
-        { item: "Transport", qty: "Lps", unitCost: 2500000, amount: 2500000 },
-        { item: "Soap", qty: "1 box", unitCost: 60000, amount: 60000 },
-        { item: "Sugar", qty: "10 kgs", unitCost: 5000, amount: 50000 },
-        { item: "Water", qty: "30 cartons", unitCost: 11000, amount: 330000 },
-        { item: "Soda", qty: "30 crates", unitCost: 20000, amount: 600000 },
-        { item: "Communication", qty: "1", unitCost: 200000, amount: 200000 },
-        { item: "Invitation cards", qty: "200", unitCost: 1000, amount: 200000 },
-        { item: "Entertainment", qty: "Lps", unitCost: 500000, amount: 500000 },
-        { item: "Miscellaneous", qty: "Lps", unitCost: 1000000, amount: 1000000 },
-      ]},
-    ];
-
-    let selectedItems = [];
-
-    // Populate categories
-    function populateCategories() {
-      const container = document.getElementById('categories');
-      categoriesData.forEach((category, index) => {
-        const card = document.createElement('div');
-        card.className = 'category-card bg-white p-6 rounded-lg shadow-md cursor-pointer fade-in';
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.innerHTML = `
-          <h3 class="text-xl font-bold text-purple-700 mb-4">${category.name}</h3>
-          <button class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition duration-300">View Items</button>
-        `;
-        card.onclick = () => showItems(category);
-        container.appendChild(card);
-      });
-    }
-
-    // Show items in a modal-like overlay
-    function showItems(category) {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay visible';
-      overlay.innerHTML = `
-        <div class="modal-content max-w-4xl">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-purple-700">${category.name}</h2>
-            <button class="text-red-500 text-2xl">×</button>
+  <div id="pledgeFormModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-40">
+    <div class="glass rounded-xl p-8 max-w-3xl w-full max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-white">Finalize Your Pledge</h3>
+        <button onclick="closeModal('pledgeFormModal')" class="text-white text-3xl font-bold">&times;</button>
+      </div>
+      <div class="overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-4">Your Details</h3>
+            <form id="pledgeForm" class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <input id="firstName" type="text" placeholder="First Name" class="p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+                <input id="lastName" type="text" placeholder="Last Name" class="p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+              </div>
+              <input id="email" type="email" placeholder="Email Address" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+              <input id="phone" type="tel" placeholder="Phone Number" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+              <input id="location" type="text" placeholder="Location (e.g., Kampala)" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
+              <textarea id="comment" placeholder="Add a comment..." rows="3" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20"></textarea>
+            </form>
           </div>
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-purple-100">
-                <th class="p-3">Item</th>
-                <th class="p-3">Quantity</th>
-                <th class="p-3">Unit Cost</th>
-                <th class="p-3">Amount</th>
-                <th class="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${category.items.map(item => `
-                <tr class="border-b">
-                  <td class="p-3">${item.item}</td>
-                  <td class="p-3">${item.qty}</td>
-                  <td class="p-3">${item.unitCost.toLocaleString()}</td>
-                  <td class="p-3">${item.amount.toLocaleString()}</td>
-                  <td class="p-3">
-                    <button class="pledge-btn bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300" onclick="addToSelectedItems('${item.item}', '${item.qty}', ${item.unitCost}, ${item.amount}, this)">Pledge</button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-4">Selected Items</h3>
+            <div id="selectedItemsList" class="space-y-3 mb-4 max-h-64 overflow-y-auto"></div>
+            <div class="border-t border-white border-opacity-10 pt-4 flex justify-between items-center">
+              <p class="text-lg">Total:</p>
+              <p id="selectedTotal" class="text-2xl font-bold"></p>
+            </div>
+            <button onclick="submitPledge()" class="w-full mt-4 p-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-purple-700 disabled:opacity-50">Submit Pledge</button>
+          </div>
         </div>
-      `;
-      overlay.querySelector('button').onclick = () => overlay.remove();
-      document.body.appendChild(overlay);
-    }
+      </div>
+    </div>
+  </div>
+  
+  <div id="adminFormModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-40">
+    <div id="adminFormModalContent" class="glass rounded-xl p-8 max-w-lg w-full"></div>
+  </div>
 
-    // Update pledge counter
-    function updatePledgeCounter() {
-      const counter = document.getElementById('pledgeCounter');
-      counter.textContent = `Pledges: ${selectedItems.length}`;
-    }
+  <div id="itemSelectionModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-40">
+    <div class="glass rounded-xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-white">Select Items to Pledge</h3>
+            <button onclick="closeModal('itemSelectionModal')" class="text-white text-3xl font-bold">&times;</button>
+        </div>
+        <div class="overflow-y-auto flex-grow">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-white border-opacity-20">
+                        <th class="p-4 w-12"><input type="checkbox" onchange="toggleAllItems(this)"></th>
+                        <th class="p-4">Item</th>
+                        <th class="p-4">Category</th>
+                        <th class="p-4">Amount Remaining</th>
+                        <th class="p-4">Quantity</th>
+                        <th class="p-4">Unit Price</th>
+                        <th class="p-4">Your Pledge</th>
+                    </tr>
+                </thead>
+                <tbody id="itemSelectionTableBody"></tbody>
+            </table>
+        </div>
+        <div class="border-t border-white border-opacity-10 pt-4 mt-4 flex justify-between items-center">
+            <div>
+                <span id="modal-selected-items-count">0</span> items selected
+            </div>
+            <div class="text-lg">
+                Total Pledge: <span id="modal-total-amount" class="font-bold text-xl"></span>
+            </div>
+            <button onclick="addSelectedItemsToPledge()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Add Items to Pledge</button>
+        </div>
+    </div>
+  </div>
 
-    // Toggle pledges modal
-    function togglePledgesModal() {
-      const modal = document.getElementById('pledgesModal');
-      modal.classList.toggle('visible');
-      // Close form modal if open
-      document.getElementById('formModal').classList.remove('visible');
-    }
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden md:hidden z-20"></div>
 
-    // Toggle form modal
-    function toggleFormModal() {
-      const modal = document.getElementById('formModal');
-      modal.classList.toggle('visible');
-      // Ensure pledges modal is open
-      document.getElementById('pledgesModal').classList.add('visible');
-    }
+  <!-- Notification -->
+  <div id="notification" class="glass rounded-lg shadow-lg p-4 max-w-sm w-full">
+    <div class="flex items-start">
+      <div id="notificationIcon" class="text-2xl mr-4"></div>
+      <div class="flex-1">
+        <h4 id="notificationTitle" class="font-bold text-white"></h4>
+        <p id="notificationMessage" class="text-gray-300"></p>
+      </div>
+    </div>
+  </div>
 
-    // Close modals
-    function closePledgesModal() {
-      document.getElementById('pledgesModal').classList.remove('visible');
-    }
-
-    function closeFormModal() {
-      document.getElementById('formModal').classList.remove('visible');
-    }
-
-    // Add to selected items
-    window.addToSelectedItems = function(item, qty, unitCost, amount, button) {
-      if (selectedItems.some(i => i.item === item && i.qty === qty)) return;
-      selectedItems.push({ item, qty, unitCost, amount, status: 'Pledged' });
-      updateSelectedItemsTable();
-      updatePledgeCounter();
-      // Change button color to green
-      button.classList.remove('bg-red-500', 'hover:bg-red-600');
-      button.classList.add('bg-green-500', 'hover:bg-green-600');
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script>
+    // JIMMY WEDS JOSTER Dashboard
+    // Global state management
+    let state = {
+      currentTab: 'dashboard',
+      isAdminMode: false,
+      budgetItems: [
+        // CHURCH
+        { id: 1, name: 'Church Fees', category: 'Church', cost: 220000, pledged: 0, status: 'available' },
+        { id: 2, name: 'Choir', category: 'Church', cost: 250000, pledged: 0, status: 'available' },
+        { id: 3, name: 'Rings', category: 'Church', cost: 200000, pledged: 0, status: 'available' },
+        { id: 4, name: 'Decoration', category: 'Church', cost: 100000, pledged: 0, status: 'available' },
+        { id: 5, name: 'Order of Mass', category: 'Church', cost: 300000, pledged: 0, status: 'available' },
+        // GROOM
+        { id: 6, name: 'Suit y\' Omu', category: 'Groom', cost: 500000, pledged: 0, status: 'available' },
+        { id: 7, name: 'Changing', category: 'Groom', cost: 200000, pledged: 0, status: 'available' },
+        { id: 8, name: 'Shoes', category: 'Groom', cost: 200000, pledged: 0, status: 'available' },
+        { id: 9, name: 'Salon', category: 'Groom', cost: 20000, pledged: 0, status: 'available' },
+        { id: 10, name: 'Stockings', category: 'Groom', cost: 50000, pledged: 0, status: 'available' },
+        { id: 11, name: 'Neck ties', category: 'Groom', cost: 40000, pledged: 0, status: 'available' },
+        { id: 12, name: 'Handkerchiefs', category: 'Groom', cost: 20000, pledged: 0, status: 'available' },
+        // BEST MAN
+        { id: 13, name: 'Suit for Best Man', category: 'Best Man', cost: 400000, pledged: 0, status: 'available' },
+        { id: 14, name: 'Changing', category: 'Best Man', cost: 200000, pledged: 0, status: 'available' },
+        { id: 15, name: 'Shoes', category: 'Best Man', cost: 200000, pledged: 0, status: 'available' },
+        { id: 16, name: 'Salon', category: 'Best Man', cost: 10000, pledged: 0, status: 'available' },
+        // ENTOURAGE
+        { id: 17, name: 'Suits', category: 'Entourage', cost: 2400000, pledged: 0, status: 'available' },
+        { id: 18, name: 'Shoes', category: 'Entourage', cost: 900000, pledged: 0, status: 'available' },
+        { id: 19, name: 'Salon', category: 'Entourage', cost: 40000, pledged: 0, status: 'available' },
+        // METRON (Matron)
+        { id: 20, name: 'Wedding gown', category: 'Matron', cost: 1000000, pledged: 0, status: 'available' },
+        { id: 21, name: 'Changing', category: 'Matron', cost: 500000, pledged: 0, status: 'available' },
+        { id: 22, name: 'Shoes', category: 'Matron', cost: 200000, pledged: 0, status: 'available' },
+        { id: 23, name: 'Salon', category: 'Matron', cost: 800000, pledged: 0, status: 'available' },
+        { id: 24, name: 'Handkerchiefs', category: 'Matron', cost: 20000, pledged: 0, status: 'available' },
+        { id: 25, name: 'Necklace', category: 'Matron', cost: 100000, pledged: 0, status: 'available' },
+        { id: 26, name: 'Hand bag', category: 'Matron', cost: 100000, pledged: 0, status: 'available' },
+        // METRON (Secondary Matron)
+        { id: 27, name: 'Wedding dress', category: 'Secondary Matron', cost: 500000, pledged: 0, status: 'available' },
+        { id: 28, name: 'Changing', category: 'Secondary Matron', cost: 200000, pledged: 0, status: 'available' },
+        { id: 29, name: 'Shoes', category: 'Secondary Matron', cost: 100000, pledged: 0, status: 'available' },
+        // BRIDE'S MAID
+        { id: 30, name: 'Wedding dress', category: 'Bride\'s Maid', cost: 400000, pledged: 0, status: 'available' },
+        { id: 31, name: 'Changing', category: 'Bride\'s Maid', cost: 200000, pledged: 0, status: 'available' },
+        { id: 32, name: 'Shoes', category: 'Bride\'s Maid', cost: 100000, pledged: 0, status: 'available' },
+        { id: 33, name: 'Salon', category: 'Bride\'s Maid', cost: 300000, pledged: 0, status: 'available' },
+        { id: 34, name: 'Peg boy and flower girl', category: 'Bride\'s Maid', cost: 200000, pledged: 0, status: 'available' },
+        // RECEPTION
+        { id: 35, name: 'Tents', category: 'Reception', cost: 800000, pledged: 0, status: 'available' },
+        { id: 36, name: 'Decoration', category: 'Reception', cost: 6500000, pledged: 0, status: 'available' },
+        { id: 37, name: 'Sound System', category: 'Reception', cost: 1000000, pledged: 0, status: 'available' },
+        { id: 38, name: 'Band', category: 'Reception', cost: 500000, pledged: 0, status: 'available' },
+        { id: 39, name: 'Video Coverage', category: 'Reception', cost: 4000000, pledged: 0, status: 'available' },
+        { id: 40, name: 'Master of Ceremony', category: 'Reception', cost: 500000, pledged: 0, status: 'available' },
+        { id: 41, name: 'Security', category: 'Reception', cost: 300000, pledged: 0, status: 'available' },
+        { id: 42, name: 'Cake', category: 'Reception', cost: 1000000, pledged: 0, status: 'available' },
+        { id: 43, name: 'Water tank', category: 'Reception', cost: 300000, pledged: 0, status: 'available' },
+        { id: 44, name: 'Catering services', category: 'Reception', cost: 600000, pledged: 0, status: 'available' },
+        // FOOD
+        { id: 45, name: 'Rice', category: 'Food', cost: 800000, pledged: 0, status: 'available' },
+        { id: 46, name: 'Matooke', category: 'Food', cost: 1000000, pledged: 0, status: 'available' },
+        { id: 47, name: 'Yams', category: 'Food', cost: 120000, pledged: 0, status: 'available' },
+        { id: 48, name: 'Irish', category: 'Food', cost: 420000, pledged: 0, status: 'available' },
+        { id: 49, name: 'Kalo', category: 'Food', cost: 160000, pledged: 0, status: 'available' },
+        { id: 50, name: 'Chapatti', category: 'Food', cost: 200000, pledged: 0, status: 'available' },
+        // SAUCE
+        { id: 51, name: 'Meat/Beef', category: 'Food', cost: 3000000, pledged: 0, status: 'available' },
+        { id: 52, name: 'Chicken', category: 'Food', cost: 750000, pledged: 0, status: 'available' },
+        { id: 53, name: 'Beans', category: 'Food', cost: 120000, pledged: 0, status: 'available' },
+        { id: 54, name: 'G.Nuts', category: 'Food', cost: 80000, pledged: 0, status: 'available' },
+        { id: 55, name: 'Greens', category: 'Food', cost: 50000, pledged: 0, status: 'available' },
+        { id: 56, name: 'Cow peas', category: 'Food', cost: 60000, pledged: 0, status: 'available' },
+        // SPICES
+        { id: 57, name: 'Tomato', category: 'Food', cost: 150000, pledged: 0, status: 'available' },
+        { id: 58, name: 'Carrots', category: 'Food', cost: 30000, pledged: 0, status: 'available' },
+        { id: 59, name: 'Onions', category: 'Food', cost: 100000, pledged: 0, status: 'available' },
+        { id: 60, name: 'Salt', category: 'Food', cost: 10000, pledged: 0, status: 'available' },
+        { id: 61, name: 'Cooking Oil', category: 'Food', cost: 280000, pledged: 0, status: 'available' },
+        { id: 62, name: 'Garlic', category: 'Food', cost: 30000, pledged: 0, status: 'available' },
+        { id: 63, name: 'Others', category: 'Food', cost: 400000, pledged: 0, status: 'available' },
+        { id: 64, name: 'Tea leaves', category: 'Food', cost: 10000, pledged: 0, status: 'available' },
+        // EBYOKOSEZA
+        { id: 65, name: 'Firewood', category: 'Miscellaneous', cost: 400000, pledged: 0, status: 'available' },
+        { id: 66, name: 'Transport', category: 'Miscellaneous', cost: 2500000, pledged: 0, status: 'available' },
+        { id: 67, name: 'Soap', category: 'Miscellaneous', cost: 60000, pledged: 0, status: 'available' },
+        { id: 68, name: 'Sugar', category: 'Miscellaneous', cost: 50000, pledged: 0, status: 'available' },
+        { id: 69, name: 'Water', category: 'Miscellaneous', cost: 330000, pledged: 0, status: 'available' },
+        { id: 70, name: 'Soda', category: 'Miscellaneous', cost: 600000, pledged: 0, status: 'available' },
+        { id: 71, name: 'Communication', category: 'Miscellaneous', cost: 200000, pledged: 0, status: 'available' },
+        { id: 72, name: 'Invitation cards', category: 'Miscellaneous', cost: 200000, pledged: 0, status: 'available' },
+        { id: 73, name: 'Entertainment', category: 'Miscellaneous', cost: 500000, pledged: 0, status: 'available' },
+        { id: 74, name: 'Miscellaneous', category: 'Miscellaneous', cost: 1000000, pledged: 0, status: 'available' },
+      ],
+      pledges: [
+        { id: 'PLD001', name: 'Mr. Patrick Masendi', amount: 500000, status: 'cleared', date: '2025-06-01', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD002', name: 'Mr. Pius Mwesoga', amount: 300000, status: 'cleared', date: '2025-06-01', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD003', name: 'Judith Karungi', amount: 300000, status: 'cleared', date: '2025-06-05', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD004', name: 'Beatrice Kobusinge', amount: 600000, status: 'cleared', date: '2025-06-05', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD005', name: 'Uthman Kirungi', amount: 150000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD006', name: 'Jackie Kunihira', amount: 200000, status: 'cleared', date: '2025-06-07', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD007', name: 'Vicent Mbahinzireki', amount: 300000, status: 'cleared', date: '2025-06-08', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD008', name: 'Charles Kayemba', amount: 100000, status: 'cleared', date: '2025-06-09', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD009', name: 'Charles Kayemba', amount: 50000, status: 'balance', date: '2025-06-09', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD010', name: 'Kamukama Justine', amount: 100000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD011', name: 'KAYEERA NATHAN', amount: 800000, status: 'cleared', date: '2025-06-10', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD012', name: 'Moses Eriku Enzama', amount: 1000000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD013', name: 'BRASIJ', amount: 2000000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD014', name: 'Allan Aloisious Kyeyune', amount: 100000, status: 'cleared', date: '2025-06-11', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD015', name: 'Peter Kiyaga', amount: 50000, status: 'cleared', date: '2025-06-12', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD016', name: 'Peter Mwesiga', amount: 200000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD017', name: 'Innocent Opio Miria', amount: 510000, status: 'cleared', date: '2025-06-13', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD018', name: 'Jackson Mutegeki', amount: 100000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD019', name: 'Flavia Ajambo', amount: 200000, status: 'cleared', date: '2025-06-14', items: [], email: '', phone: 'unknown@example.com' },
+        { id: 'PLD020', name: 'Derrick Kiwana', amount: 310000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD021', name: 'Ndyamuhaki Ronald', amount: 420000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD022', name: 'Tsemwami Everton', amount: 100000, status: 'cleared', date: '2025-06-15', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD023', name: 'Anonymous', amount: 1000000, status: 'cleared', date: '2025-06-16', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD024', name: 'Bisaso family', amount: 100000, status: 'cleared', date: '2025-06-17', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD025', name: 'TCOIN', amount: 100000, status: 'cleared', date: '2025-06-18', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD026', name: 'Eric CM', amount: 250000, status: 'cleared', date: '2025-06-09', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD027', name: 'Eric CM', amount: 150000, status: 'balance', date: '2025-06-09', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD028', name: 'Nabanoba Jenny', amount: 1000000, status: 'cleared', date: '2025-06-09', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD029', name: 'Claire', amount: 200000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD030', name: 'Hajara', amount: 50000, status: 'cleared', date: '2025-06-19', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD031', name: 'Adrian', amount: 700000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD032', name: 'Adrian', amount: 300000, status: 'balance', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD033', name: 'Mariane', amount: 200000, status: 'cleared', date: '2025-06-20', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD034', name: 'Angella', amount: 300000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD035', name: 'Joseph Ochepa', amount: 370000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD036', name: 'Gorreti Tumwebaze', amount: 100000, status: 'cleared', date: '2025-06-21', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD037', name: 'Immaculate Nanteza', amount: 100000, status: 'pending', date: '', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD038', name: 'Paul Asiimwe', amount: 300000, status: 'cleared', date: '2025-06-06', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD039', name: 'Becky Nambuya', amount: 100000, status: 'cleared', date: '2025-06-22', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD040', name: 'Justine Kiiza', amount: 52000, status: 'cleared', date: '2025-06-22', items: [], email: 'unknown@example.com', phone: '' },
+        { id: 'PLD041', name: 'Rosette Kabugho', amount: 103000, status: 'cleared', date: '2025-06-20', items: [], email: 'unknown@example.com', phone: '' }
+      ],
+      attendees: [
+        { id: 'ATT001', name: 'Nabanoba jenny', location: 'Kampala', groupSize: 1 },
+        { id: 'ATT002', name: 'Kayeera nathan', location: 'Kampala', groupSize: 1 },
+        { id: 'ATT003', name: 'Kayemba charles', location: 'Kampala', groupSize: 1 },
+        { id: 'ATT004', name: 'Okorio Adrian', location: 'Kampala', groupSize: 1 },
+        { id: 'ATT005', name: 'Beinomugisha hajara', location: 'Kampala', groupSize: 1 },
+      ],
+      selectedItems: [],
+      weddingDate: '2025-07-05',
+      charts: {}
     };
 
-    // Remove item
-    window.removeItem = function(index) {
-      selectedItems.splice(index, 1);
-      updateSelectedItemsTable();
-      updatePledgeCounter();
-    };
-
-    // Update item
-    window.updateItem = function(index, field, value) {
-      selectedItems[index][field] = field === 'unitCost' ? parseFloat(value) || 0 : value;
-      updateSelectedItemsTable();
-    };
-
-    // Update status color
-    function updateStatusColor(select) {
-      select.className = `p-2 rounded-lg ${select.value === 'Cleared' ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black'}`;
+    // Utility functions
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-UG', {
+        style: 'currency',
+        currency: 'UGX',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(amount).replace('UGX', 'UGX ');
     }
 
-    // Update selected items table
-    function updateSelectedItemsTable() {
-      const tbody = document.getElementById('selectedItemsBody');
-      tbody.innerHTML = selectedItems.map((item, index) => {
-        const isLps = item.qty === 'Lps';
-        const calculatedAmount = isLps ? item.unitCost : (parseFloat(item.qty) || 1) * item.unitCost;
-        item.amount = calculatedAmount;
-        return `
-          <tr class="border-b">
-            <td class="p-4">${index + 1}</td>
-            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="text" value="${item.item}" oninput="updateItem(${index}, 'item', this.value)"></td>
-            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="text" value="${item.qty}" oninput="updateItem(${index}, 'qty', this.value)"></td>
-            <td class="p-4"><input class="w-full p-2 border rounded-lg" type="number" value="${item.unitCost}" oninput="updateItem(${index}, 'unitCost', this.value)"></td>
-            <td class="p-4">${calculatedAmount.toLocaleString()}</td>
-            <td class="p-4">
-              <select class="p-2 rounded-lg" onchange="updateItem(${index}, 'status', this.value); updateStatusColor(this)">
-                <option value="Cleared" ${item.status === 'Cleared' ? 'selected' : ''}>Cleared</option>
-                <option value="Pledged" ${item.status === 'Pledged' ? 'selected' : ''}>Pledged</option>
-              </select>
-            </td>
-            <td class="p-4">
-              <button class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300" onclick="removeItem(${index})">Remove</button>
-            </td>
-          </tr>
+    function calculateDaysRemaining() {
+      const today = new Date();
+      const weddingDate = new Date(state.weddingDate);
+      const diffTime = weddingDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays;
+    }
+
+    function generatePledgeId() {
+      const num = (state.pledges.length + 1).toString().padStart(3, '0');
+      return `PLD${num}`;
+    }
+
+    function generateAttendeeId() {
+        const num = (state.attendees.length + 1).toString().padStart(3, '0');
+        return `ATT${num}`;
+    }
+
+    function showNotification(title, message, type = 'success') {
+      const notification = document.getElementById('notification');
+      const iconElement = document.getElementById('notificationIcon');
+      const titleElement = document.getElementById('notificationTitle');
+      const messageElement = document.getElementById('notificationMessage');
+      
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      
+      iconElement.textContent = icons[type] || icons.info;
+      titleElement.textContent = title;
+      messageElement.textContent = message;
+      
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 4000);
+    }
+
+    // Tab management
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.add('hidden');
+      });
+      
+      // Show selected tab
+      document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+      
+      // Update navigation buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('tab-inactive');
+      });
+      
+      // Find the button that corresponds to the tabName and activate it
+      const buttonToActivate = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(`switchTab('${tabName}')`));
+      if(buttonToActivate) {
+        buttonToActivate.classList.add('tab-active');
+        buttonToActivate.classList.remove('tab-inactive');
+      }
+      
+      state.currentTab = tabName;
+      
+      // Load tab-specific content
+      switch(tabName) {
+        case 'dashboard':
+          updateDashboard();
+          break;
+        case 'pledges':
+          updatePledgesTab();
+          break;
+        case 'attendees':
+          updateAttendeesTab();
+          break;
+        case 'budget':
+          updateBudgetTab();
+          break;
+        case 'analytics':
+          updateAnalyticsTab();
+          break;
+        case 'admin':
+          updateAdminTab();
+          break;
+      }
+    }
+
+    // Dashboard functions
+    function updateDashboard() {
+      const stats = calculateStats();
+      
+      // Update stat cards
+      document.getElementById('totalBudget').textContent = formatCurrency(stats.totalBudget);
+      document.getElementById('totalPledged').textContent = formatCurrency(stats.totalPledged);
+      document.getElementById('totalCleared').textContent = formatCurrency(stats.totalCleared);
+      document.getElementById('totalRemaining').textContent = formatCurrency(stats.totalRemaining);
+      
+      // Update progress
+      const progressPercent = Math.round((stats.totalPledged / stats.totalBudget) * 100);
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+      document.getElementById('budgetCovered').textContent = `${progressPercent}%`;
+      
+      // Update days remaining
+      const daysRemaining = calculateDaysRemaining();
+      document.getElementById('daysRemaining').textContent = daysRemaining > 0 ? `${daysRemaining} days` : 'Wedding Day!';
+      
+      // Update recent pledges
+      updateRecentPledges();
+      
+      // Update chart
+      updatePledgeChart();
+    }
+
+    function calculateStats() {
+      const totalBudget = state.budgetItems.reduce((sum, item) => sum + item.cost, 0);
+      const totalPledged = state.pledges.reduce((sum, pledge) => sum + pledge.amount, 0);
+      const totalCleared = state.pledges
+        .filter(pledge => pledge.status === 'cleared')
+        .reduce((sum, pledge) => sum + pledge.amount, 0);
+      
+      const totalRemaining = totalBudget - totalPledged;
+      
+      return { totalBudget, totalPledged, totalCleared, totalRemaining };
+    }
+
+    function updateRecentPledges() {
+      const recentPledges = state.pledges
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 5);
+      
+      const container = document.getElementById('recentPledges');
+      container.innerHTML = '';
+      
+      if (recentPledges.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-4">No pledges yet</p>';
+        return;
+      }
+      
+      recentPledges.forEach(pledge => {
+        const statusColors = {
+          balance: 'bg-orange-500',
+          cleared: 'bg-green-500',
+          pending: 'bg-blue-500'
+        };
+        
+        const nameParts = pledge.name.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+        
+        const element = document.createElement('div');
+        element.className = 'flex items-center justify-between p-4 glass rounded-lg';
+        element.innerHTML = `
+          <div class="flex items-center space-x-4">
+            <div class="w-10 h-10 ${statusColors[pledge.status]} rounded-full flex items-center justify-center">
+              <span class="text-white font-bold">${firstName[0]}${lastName ? lastName[0] : ''}</span>
+            </div>
+            <div>
+              <p class="text-white font-medium">${pledge.name}</p>
+              <p class="text-gray-300 text-sm">${pledge.items.length} item(s) pledged</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-white font-semibold">${formatCurrency(pledge.amount)}</p>
+            <p class="text-gray-300 text-sm capitalize">${pledge.status}</p>
+          </div>
         `;
-      }).join('');
-
-      document.querySelectorAll('select').forEach(updateStatusColor);
-      updateTotalSelections();
+        container.appendChild(element);
+      });
     }
 
-    // Update total selections
-    function updateTotalSelections() {
-      const total = selectedItems.reduce((sum, item) => {
-        const isLps = item.qty === 'Lps';
-        return sum + (isLps ? item.unitCost : (parseFloat(item.qty) || 1) * item.unitCost);
-      }, 0);
-      document.getElementById('totalAmount').textContent = total.toLocaleString();
-      document.getElementById('totalSelections').value = total.toLocaleString();
-    }
-
-    // Form submission
-    document.getElementById('weddingForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const fields = ['firstName', 'lastName', 'email', 'phone', 'location'];
-      let isValid = true;
-
-      fields.forEach(field => {
-        const input = document.getElementById(field);
-        if (!input.value.trim()) {
-          input.classList.add('border-red-500');
-          isValid = false;
-        } else {
-          input.classList.remove('border-red-500');
-          input.classList.add('border-green-500');
+    function updatePledgeChart() {
+      const ctx = document.getElementById('pledgeChart').getContext('2d');
+      
+      if (state.charts.pledgeChart) {
+        state.charts.pledgeChart.destroy();
+      }
+      
+      const statusCounts = {
+        balance: state.pledges.filter(p => p.status === 'balance').length,
+        cleared: state.pledges.filter(p => p.status === 'cleared').length,
+        pending: state.pledges.filter(p => p.status === 'pending').length
+      };
+      
+      state.charts.pledgeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Balance', 'Cleared', 'Pending'],
+          datasets: [{
+            data: [statusCounts.balance, statusCounts.cleared, statusCounts.pending],
+            backgroundColor: ['#ed8936', '#48bb78', '#4299e1'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'white',
+                usePointStyle: true,
+                padding: 20
+              }
+            }
+          }
         }
       });
-
-      const email = document.getElementById('email');
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(email.value)) {
-        email.classList.add('border-red-500');
-        isValid = false;
-      }
-
-      const phone = document.getElementById('phone');
-      const phonePattern = /^\+?\d{10,14}$/;
-      if (!phonePattern.test(phone.value)) {
-        phone.classList.add('border-red-500');
-        isValid = false;
-      }
-
-      if (selectedItems.length === 0) {
-        alert('Please select at least one item before submitting.');
-        isValid = false;
-      }
-
-      if (isValid) {
-        const formData = new FormData();
-        formData.append('firstName', document.getElementById('firstName').value);
-        formData.append('lastName', document.getElementById('lastName').value);
-        formData.append('email', document.getElementById('email').value);
-        formData.append('phone', document.getElementById('phone').value);
-        formData.append('location', document.getElementById('location').value);
-        formData.append('totalSelections', document.getElementById('totalSelections').value);
-        formData.append('comment', document.getElementById('comment').value);
-        formData.append('selectedItems', JSON.stringify(selectedItems));
-
-        try {
-          const response = await fetch('https://script.google.com/macros/s/AKfycbz8crr3bKTNMyude69r4Yzm1E77ke657EaO3pvHNFy-91lqav-GPuKx7DrPgS3gKQct/exec', {
-            method: 'POST',
-            body: formData,
-            mode: 'cors'
-          });
-          const result = await response.json();
-          if (result.result === 'success') {
-            alert('Thank you for supporting Agaba Jimmy! Your pledge has been sent. Total Budget Selected: ' + document.getElementById('totalSelections').value + ' UGX');
-            document.getElementById('weddingForm').reset();
-            fields.forEach(field => document.getElementById(field).classList.remove('border-green-500'));
-            selectedItems = [];
-            updateSelectedItemsTable();
-            updatePledgeCounter();
-            closeFormModal();
-            closePledgesModal();
-          } else {
-            alert('Error submitting form: ' + result.error);
-          }
-        } catch (error) {
-          alert('Error submitting form: ' + error.message);
-        }
-      } else {
-        alert('Please fill all required fields and select at least one item.');
-      }
-    });
-
-    // Slider
-    let slideIndex = 0;
-    function showSlides() {
-      try {
-        const slides = document.querySelector('.slides');
-        const totalSlides = document.querySelectorAll('.slides > *').length;
-        slideIndex = (slideIndex + 1) % totalSlides;
-        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
-      } catch (error) {
-        console.error('Slider error:', error);
-      }
     }
 
-    // Initialize
-    populateCategories();
-    setInterval(showSlides, 5000);
+    // Pledges tab functions
+    function updatePledgesTab() {
+      updatePledgeStats();
+      updatePledgesTable();
+      setupPledgeFilters();
+    }
 
-    // Event listeners
-    document.getElementById('togglePledgesBtn').addEventListener('click', togglePledgesModal);
-    document.getElementById('toggleFormBtn').addEventListener('click', toggleFormModal);
-    document.getElementById('closePledgesBtn').addEventListener('click', closePledgesModal);
-    document.getElementById('closeFormBtn').addEventListener('click', closeFormModal);
+    function updatePledgeStats() {
+      const balanceCount = state.pledges.filter(p => p.status === 'balance').length;
+      const clearedCount = state.pledges.filter(p => p.status === 'cleared').length;
+      const pendingCount = state.pledges.filter(p => p.status === 'pending').length;
+      
+      document.getElementById('balanceCount').textContent = balanceCount;
+      document.getElementById('clearedCount').textContent = clearedCount;
+      document.getElementById('pendingCount').textContent = pendingCount;
+    }
 
-    // Initial pledge counter update
-    updatePledgeCounter();
+    function updatePledgesTable(filteredPledges = state.pledges) {
+      const tbody = document.getElementById('pledgesTableBody');
+      tbody.innerHTML = '';
+      
+      filteredPledges.forEach(pledge => {
+        const statusColors = {
+          balance: 'status-balance',
+          cleared: 'status-cleared',
+          pending: 'status-pending'
+        };
+        
+        const itemNames = pledge.items.map(itemId => {
+          const item = state.budgetItems.find(b => b.id === itemId);
+          return item ? item.name : 'General Contribution';
+        }).join(', ');
+        
+        const row = document.createElement('tr');
+        row.className = 'border-b border-white border-opacity-10';
+        row.innerHTML = `
+          <td class="p-4">${pledge.id}</td>
+          <td class="p-4">${pledge.name}</td>
+          <td class="p-4">${itemNames}</td>
+          <td class="p-4 font-semibold">${formatCurrency(pledge.amount)}</td>
+          <td class="p-4">
+            <span class="px-3 py-1 rounded-full text-white text-sm ${statusColors[pledge.status]}">
+              ${pledge.status.charAt(0).toUpperCase() + pledge.status.slice(1)}
+            </span>
+          </td>
+          <td class="p-4">${pledge.date ? new Date(pledge.date).toLocaleDateString() : '-'}</td>
+          <td class="p-4">
+            <div class="flex space-x-2">
+              <button onclick="viewPledge('${pledge.id}')" class="text-blue-400 hover:text-blue-300">View</button>
+              ${state.isAdminMode ? `
+                  <button onclick="updatePledgeStatus('${pledge.id}')" class="text-green-400 hover:text-green-300">Update</button>
+                  <button onclick="deletePledge('${pledge.id}')" class="text-red-400 hover:text-red-300">Delete</button>
+              ` : ''}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function setupPledgeFilters() {
+      const statusFilter = document.getElementById('statusFilter');
+      const searchInput = document.getElementById('searchPledges');
+      
+      statusFilter.addEventListener('change', filterPledges);
+      searchInput.addEventListener('input', filterPledges);
+    }
+
+    function filterPledges() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const searchTerm = document.getElementById('searchPledges').value.toLowerCase();
+      
+      let filteredPledges = state.pledges;
+      
+      if (statusFilter !== 'all') {
+        filteredPledges = filteredPledges.filter(pledge => pledge.status === statusFilter);
+      }
+      
+      if (searchTerm) {
+        filteredPledges = filteredPledges.filter(pledge => 
+          pledge.name.toLowerCase().includes(searchTerm) ||
+          (pledge.email && pledge.email.toLowerCase().includes(searchTerm)) ||
+          pledge.id.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      updatePledgesTable(filteredPledges);
+    }
+
+    // Budget tab functions
+    function updateBudgetTab() {
+      const categories = groupBudgetByCategory();
+      const container = document.getElementById('budgetCategories');
+      container.innerHTML = '';
+      
+      Object.entries(categories).forEach(([category, items]) => {
+        const categoryElement = document.createElement('div');
+        categoryElement.className = 'glass rounded-xl p-6';
+        
+        const totalCost = items.reduce((sum, item) => sum + item.cost, 0);
+        const totalPledged = items.reduce((sum, item) => sum + item.pledged, 0);
+        const progress = totalCost > 0 ? Math.round((totalPledged / totalCost) * 100) : 0;
+        
+        categoryElement.innerHTML = `
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-white">${category}</h3>
+            <span class="text-sm text-gray-300">${items.length} items</span>
+          </div>
+          
+          <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-300 mb-2">
+              <span>Progress</span>
+              <span>${progress}%</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2">
+              <div class="progress-bar h-2 rounded-full" style="width: ${progress}%"></div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            ${items.map(item => `
+              <div class="flex items-center justify-between p-3 bg-black bg-opacity-20 rounded-lg">
+                <div class="flex-1">
+                  <p class="text-white font-medium">${item.name}</p>
+                  <p class="text-gray-300 text-sm">${formatCurrency(item.cost)}</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-sm text-gray-300">${formatCurrency(item.pledged)} pledged</span>
+                  <button onclick="selectBudgetItem(${item.id})" class="px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-sm rounded-full hover:from-pink-600 hover:to-purple-700 ${item.pledged >= item.cost ? 'opacity-50 cursor-not-allowed' : ''}" ${item.pledged >= item.cost ? 'disabled' : ''}>
+                    ${item.pledged >= item.cost ? 'Complete' : 'Select'}
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        
+        container.appendChild(categoryElement);
+      });
+    }
+
+    function groupBudgetByCategory() {
+      const categories = {};
+      state.budgetItems.forEach(item => {
+        if (!categories[item.category]) {
+          categories[item.category] = [];
+        }
+        categories[item.category].push(item);
+      });
+      return categories;
+    }
+
+    function selectBudgetItem(itemId) {
+      const item = state.budgetItems.find(b => b.id === itemId);
+      if (!item || item.pledged >= item.cost) {
+        showNotification('Item Unavailable', 'This item is already fully pledged.', 'warning');
+        return;
+      }
+      
+      if (!state.selectedItems.find(selected => selected.id === itemId)) {
+        const remainingAmount = item.cost - item.pledged;
+        state.selectedItems.push({
+          id: itemId,
+          name: item.name,
+          cost: item.cost,
+          pledged: item.pledged,
+          quantity: 1,
+          unitPrice: remainingAmount,
+          amount: remainingAmount
+        });
+        showNotification('Item Added', `${item.name} added to your pledge.`, 'success');
+      } else {
+         state.selectedItems = state.selectedItems.filter(i => i.id !== itemId);
+         showNotification('Item Removed', `${item.name} removed from your pledge.`, 'info');
+      }
+
+      updateBudgetSelectionSummary();
+      updateBudgetTab();
+    }
+
+    function updateBudgetSelectionSummary() {
+        const container = document.getElementById('pledge-summary-container');
+        if (!container) return;
+
+        if (state.selectedItems.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const total = state.selectedItems.reduce((sum, item) => sum + item.amount, 0);
+
+        container.innerHTML = `
+            <div class="p-6 glass rounded-xl mb-6">
+                <h3 class="text-xl font-semibold mb-4">Your Pledge Summary</h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-5 gap-4 text-sm text-gray-400 font-bold px-2">
+                        <span class="col-span-1">Item</span>
+                        <span class="text-center">Quantity</span>
+                        <span class="text-center">Unit Price</span>
+                        <span class="text-right">Amount</span>
+                        <span class="text-right">Action</span>
+                    </div>
+                    ${state.selectedItems.map(item => `
+                        <div class="grid grid-cols-5 gap-4 items-center summary-item-row" data-id="${item.id}">
+                            <div class="col-span-1">
+                                <input type="text" value="${item.name}" oninput="updatePledgeSummaryItemName(${item.id})" class="summary-name-input w-full p-2 glass rounded text-white border border-white border-opacity-20 bg-black bg-opacity-20">
+                            </div>
+                            <div>
+                                <input type="number" value="${item.quantity}" min="1" oninput="updatePledgeSummaryItemAmount(${item.id})" class="summary-quantity-input w-full p-2 glass rounded text-white text-center border border-white border-opacity-20 bg-black bg-opacity-20">
+                            </div>
+                            <div>
+                                <input type="number" value="${item.unitPrice}" min="0" oninput="updatePledgeSummaryItemAmount(${item.id})" class="summary-unit-price-input w-full p-2 glass rounded text-white text-center border border-white border-opacity-20 bg-black bg-opacity-20">
+                            </div>
+                            <span class="summary-amount-display text-right font-mono px-2">${formatCurrency(item.amount)}</span>
+                            <div class="text-right">
+                                <button onclick="removeSelectedItem(${item.id})" class="text-sm px-3 py-1 rounded-lg bg-red-800 bg-opacity-50 text-red-300 hover:bg-opacity-75 transition-colors">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="border-t border-white border-opacity-20 mt-4 pt-4 flex justify-between items-center font-bold px-2">
+                    <span>Total</span>
+                    <span id="summary-total-amount">${formatCurrency(total)}</span>
+                </div>
+                <button onclick="openPledgeFormModal()" class="w-full mt-4 p-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-purple-700">
+                    Proceed to Pledge
+                </button>
+            </div>
+        `;
+    }
+
+    function updatePledgeSummaryItemName(itemId) {
+        const itemInState = state.selectedItems.find(i => i.id === itemId);
+        if (!itemInState) return;
+        const summaryRow = document.querySelector(`.summary-item-row[data-id="${itemId}"]`);
+        if (!summaryRow) return;
+        const nameInput = summaryRow.querySelector('.summary-name-input');
+        itemInState.name = nameInput.value;
+    }
+
+    function updatePledgeSummaryItemAmount(itemId) {
+        const itemInState = state.selectedItems.find(i => i.id === itemId);
+        if (!itemInState) return;
+
+        const summaryRow = document.querySelector(`.summary-item-row[data-id="${itemId}"]`);
+        if (!summaryRow) return;
+
+        const quantityInput = summaryRow.querySelector('.summary-quantity-input');
+        const unitPriceInput = summaryRow.querySelector('.summary-unit-price-input');
+        
+        const quantity = parseInt(quantityInput.value) || 0;
+        const unitPrice = parseInt(unitPriceInput.value) || 0;
+
+        itemInState.quantity = quantity;
+        itemInState.unitPrice = unitPrice;
+        itemInState.amount = quantity * unitPrice;
+        
+        const amountDisplay = summaryRow.querySelector('.summary-amount-display');
+        amountDisplay.textContent = formatCurrency(itemInState.amount);
+
+        const total = state.selectedItems.reduce((sum, item) => sum + item.amount, 0);
+        document.getElementById('summary-total-amount').textContent = formatCurrency(total);
+    }
+
+    function openPledgeFormModal() {
+        const modal = document.getElementById('pledgeFormModal');
+        if (!modal) return;
+        updateSelectedItems();
+        modal.classList.remove('hidden');
+    }
+
+    // Make pledge tab functions
+    function updateSelectedItems() {
+      const container = document.getElementById('selectedItemsList');
+      const totalElement = document.getElementById('selectedTotal');
+      const submitButton = document.querySelector('button[onclick="submitPledge()"]');
+      
+      if (state.selectedItems.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-400">
+            <span class="text-4xl mb-4 block">📝</span>
+            <p>No items selected yet</p>
+            <p class="text-sm">Browse budget categories to add items</p>
+          </div>
+        `;
+        totalElement.textContent = formatCurrency(0);
+        submitButton.disabled = true;
+        return;
+      }
+      
+      const total = state.selectedItems.reduce((sum, item) => sum + item.amount, 0);
+      
+      container.innerHTML = state.selectedItems.map(item => `
+        <div class="flex items-center justify-between p-3 glass rounded-lg">
+          <div class="flex-1">
+            <p class="text-white font-medium">${item.name}</p>
+            <p class="text-gray-300 text-sm">Pledging: ${formatCurrency(item.amount)}</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button onclick="removeSelectedItem(${item.id})" class="text-red-400 hover:text-red-300">
+              <span class="text-2xl font-bold">×</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      totalElement.textContent = formatCurrency(total);
+      submitButton.disabled = false;
+    }
+
+    function removeSelectedItem(itemId) {
+      state.selectedItems = state.selectedItems.filter(item => item.id !== itemId);
+      updateSelectedItems();
+      updateBudgetSelectionSummary();
+      updateBudgetTab(); // To update the button state
+      showNotification('Item Removed', 'Item removed from your pledge.', 'info');
+    }
+
+    function submitPledge() {
+      const form = document.getElementById('pledgeForm');
+      
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const comment = document.getElementById('comment').value.trim();
+      
+      if (!firstName || !lastName || !email || !phone || !location) {
+        showNotification('Form Incomplete', 'Please fill in all required fields.', 'error');
+        return;
+      }
+      
+      if (state.selectedItems.length === 0) {
+        showNotification('No Items Selected', 'Please select at least one item to pledge.', 'error');
+        return;
+      }
+      
+      const pledge = {
+        id: generatePledgeId(),
+        name: `${firstName} ${lastName}`,
+        email,
+        phone,
+        location,
+        comment,
+        items: state.selectedItems.map(item => item.id),
+        amount: state.selectedItems.reduce((sum, item) => sum + item.amount, 0),
+        status: 'pending',
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      state.selectedItems.forEach(selectedItem => {
+        const budgetItem = state.budgetItems.find(b => b.id === selectedItem.id);
+        if (budgetItem) {
+          budgetItem.pledged += selectedItem.amount;
+          if (budgetItem.pledged >= budgetItem.cost) {
+            budgetItem.status = 'complete';
+          } else if (budgetItem.pledged > 0) {
+            budgetItem.status = 'partial';
+          }
+        }
+      });
+        state.pledges.push(pledge);
+        
+        form.reset();
+        state.selectedItems = [];
+        updateSelectedItems();
+        updateBudgetSelectionSummary();
+        updateBudgetTab();
+        
+        showNotification('Pledge Submitted', `Thank you ${firstName}! Your pledge has been submitted successfully.`, 'success');
+        
+        setTimeout(() => {
+          closeModal('pledgeFormModal');
+          const pledgesButton = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes("switchTab('pledges')"));
+          if (pledgesButton) pledgesButton.click();
+        }, 1500);
+      }
+
+      // Analytics functions
+      function updateAnalyticsTab() {
+        updateAnalyticsKeyMetrics();
+        updateStatusAmountChart();
+        updateAmountTiersChart();
+        updateCumulativeTrendChart();
+        updateCategoryChart();
+        updateTopContributors();
+      }
+
+      function updateAnalyticsKeyMetrics() {
+        const stats = calculateStats();
+        const { totalBudget, totalPledged, totalCleared } = stats;
+
+        const pledgeToBudgetRatio = totalBudget > 0 ? (totalPledged / totalBudget) * 100 : 0;
+        const clearedToPledgedRatio = totalPledged > 0 ? (totalCleared / totalPledged) * 100 : 0;
+        const averagePledge = state.pledges.length > 0 ? totalPledged / state.pledges.length : 0;
+        
+        const contributorNames = new Set(state.pledges.map(p => p.name.trim()));
+        const totalContributors = contributorNames.size;
+
+        document.getElementById('analyticsPledgeToBudgetRatio').textContent = `${pledgeToBudgetRatio.toFixed(1)}%`;
+        document.getElementById('analyticsClearedToPledgedRatio').textContent = `${clearedToPledgedRatio.toFixed(1)}%`;
+        document.getElementById('analyticsAveragePledge').textContent = formatCurrency(averagePledge);
+        document.getElementById('analyticsTotalContributors').textContent = totalContributors;
+      }
+
+      function updateStatusAmountChart() {
+        const ctx = document.getElementById('statusAmountChart').getContext('2d');
+        if (state.charts.statusAmountChart) {
+            state.charts.statusAmountChart.destroy();
+        }
+
+        const statusAmounts = { balance: 0, cleared: 0, pending: 0 };
+        state.pledges.forEach(p => {
+            if (statusAmounts[p.status] !== undefined) {
+                statusAmounts[p.status] += p.amount;
+            }
+        });
+
+        state.charts.statusAmountChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Balance', 'Cleared', 'Pending'],
+                datasets: [{
+                    data: [statusAmounts.balance, statusAmounts.cleared, statusAmounts.pending],
+                    backgroundColor: ['#ed8936', '#48bb78', '#4299e1'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: 'white' } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += formatCurrency(context.parsed); }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+      }
+
+      function updateAmountTiersChart() {
+          const ctx = document.getElementById('amountTiersChart').getContext('2d');
+          if (state.charts.amountTiersChart) {
+              state.charts.amountTiersChart.destroy();
+          }
+
+          const tiers = {
+              'Under 100k': 0, '100k - 250k': 0, '250k - 500k': 0, '500k - 1M': 0, 'Over 1M': 0
+          };
+          const tierLimits = [100000, 250000, 500000, 1000000];
+
+          state.pledges.forEach(p => {
+              if (p.amount < tierLimits[0]) tiers['Under 100k']++;
+              else if (p.amount < tierLimits[1]) tiers['100k - 250k']++;
+              else if (p.amount < tierLimits[2]) tiers['250k - 500k']++;
+              else if (p.amount < tierLimits[3]) tiers['500k - 1M']++;
+              else tiers['Over 1M']++;
+          });
+
+          state.charts.amountTiersChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: Object.keys(tiers),
+                  datasets: [{
+                      label: 'Number of Pledges',
+                      data: Object.values(tiers),
+                      backgroundColor: 'rgba(236, 72, 153, 0.8)',
+                      borderRadius: 8
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white', stepSize: 1 }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                  }
+              }
+          });
+      }
+
+      function updateCategoryChart() {
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        
+        if (state.charts.categoryChart) {
+          state.charts.categoryChart.destroy();
+        }
+        
+        const categories = groupBudgetByCategory();
+        const categoryData = Object.entries(categories).map(([category, items]) => ({
+          category,
+          total: items.reduce((sum, item) => sum + item.cost, 0),
+          pledged: items.reduce((sum, item) => sum + item.pledged, 0)
+        }));
+        
+        state.charts.categoryChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: categoryData.map(c => c.category),
+            datasets: [
+              {
+                label: 'Budget',
+                data: categoryData.map(c => c.total),
+                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                borderRadius: 8
+              },
+              {
+                label: 'Pledged',
+                data: categoryData.map(c => c.pledged),
+                backgroundColor: 'rgba(72, 187, 120, 0.8)',
+                borderRadius: 8
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+              x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+              y: { ticks: { color: 'white', callback: value => formatCurrency(value) }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+            }
+          }
+        });
+      }
+
+      function updateCumulativeTrendChart() {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        
+        if (state.charts.trendChart) {
+          state.charts.trendChart.destroy();
+        }
+        
+        const pledgesWithDate = state.pledges
+            .filter(p => p.date)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const datePoints = [...new Set(pledgesWithDate.map(p => p.date))].sort((a, b) => new Date(a) - new Date(b));
+
+        let cumulativePledged = 0;
+        let cumulativeCleared = 0;
+        
+        const trendData = { pledged: [], cleared: [] };
+        const pledgesByDate = {};
+
+        pledgesWithDate.forEach(p => {
+            if (!pledgesByDate[p.date]) {
+                pledgesByDate[p.date] = { pledged: 0, cleared: 0 };
+            }
+            pledgesByDate[p.date].pledged += p.amount;
+            if (p.status === 'cleared') {
+                pledgesByDate[p.date].cleared += p.amount;
+            }
+        });
+
+        datePoints.forEach(date => {
+            if (pledgesByDate[date]) {
+                cumulativePledged += pledgesByDate[date].pledged;
+                cumulativeCleared += pledgesByDate[date].cleared;
+            }
+            trendData.pledged.push({ x: date, y: cumulativePledged });
+            trendData.cleared.push({ x: date, y: cumulativeCleared });
+        });
+        
+        state.charts.trendChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            datasets: [{
+                  label: 'Cumulative Pledged',
+                  data: trendData.pledged,
+                  borderColor: 'rgba(118, 75, 162, 1)',
+                  backgroundColor: 'rgba(118, 75, 162, 0.2)',
+                  fill: true,
+                  tension: 0.1
+              }, {
+                  label: 'Cumulative Cleared',
+                  data: trendData.cleared,
+                  borderColor: 'rgba(72, 187, 120, 1)',
+                  backgroundColor: 'rgba(72, 187, 120, 0.2)',
+                  fill: true,
+                  tension: 0.1
+              }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+              x: { 
+                type: 'time',
+                time: { unit: 'day', tooltipFormat: 'll' },
+                ticks: { color: 'white' }, 
+                grid: { color: 'rgba(255, 255, 255, 0.1)' } 
+              },
+              y: { 
+                ticks: { color: 'white', callback: value => formatCurrency(value) }, 
+                grid: { color: 'rgba(255, 255, 255, 0.1)' } 
+              }
+            }
+          }
+        });
+      }
+
+      function updateTopContributors() {
+        const contributorTotals = {};
+        state.pledges.forEach(pledge => {
+            const name = pledge.name.trim();
+            if (!contributorTotals[name]) {
+                contributorTotals[name] = { amount: 0, location: pledge.location || 'Unknown' };
+            }
+            contributorTotals[name].amount += pledge.amount;
+        });
+
+        const sortedContributors = Object.entries(contributorTotals)
+            .map(([name, data]) => ({ name, ...data }))
+            .sort((a, b) => b.amount - a.amount)
+            .slice(0, 10);
+        
+        const container = document.getElementById('topContributors');
+        container.innerHTML = '';
+        
+        if (sortedContributors.length === 0) {
+          container.innerHTML = '<p class="text-gray-400 text-center py-4">No contributors yet.</p>';
+          return;
+        }
+        
+        sortedContributors.forEach((contributor, index) => {
+          const element = document.createElement('div');
+          element.className = 'flex items-center justify-between p-4 glass rounded-lg';
+          
+          const rankColors = ['bg-yellow-400', 'bg-gray-400', 'bg-yellow-600'];
+          const rankIcon = index < 3 ? 
+            `<div class="w-8 h-8 ${rankColors[index]} rounded-full flex items-center justify-center text-white font-bold">${index + 1}</div>`
+            : `<div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white">${index + 1}</div>`;
+
+          element.innerHTML = `
+            <div class="flex items-center space-x-4">
+              ${rankIcon}
+              <div>
+                <p class="text-white font-medium">${contributor.name}</p>
+                <p class="text-gray-300 text-sm">${contributor.location}</p>
+              </div>
+            </div>
+            <p class="text-white font-semibold">${formatCurrency(contributor.amount)}</p>
+          `;
+          container.appendChild(element);
+        });
+      }
+
+      // Admin tab functions
+      function updateAdminTab() {
+        const adminContainer = document.getElementById('admin-content');
+        if (!adminContainer) return;
+
+        adminContainer.innerHTML = `
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-xl font-semibold text-white mb-4">Admin Mode</h3>
+              <div class="flex items-center justify-between p-4 glass rounded-lg">
+                <p class="text-gray-300">Enable admin mode to access editing and deleting functionalities.</p>
+                <label for="adminToggle" class="flex items-center cursor-pointer">
+                  <div class="relative">
+                    <input type="checkbox" id="adminToggle" class="sr-only" ${state.isAdminMode ? 'checked' : ''} onchange="toggleAdminMode()">
+                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-semibold text-white mb-4">Data Management</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="exportData()" class="w-full p-4 glass rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all">Export Data (JSON)</button>
+                <button onclick="importData()" class="w-full p-4 glass rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all">Import Data (JSON)</button>
+              </div>
+            </div>
+
+            <!-- Budget Management -->
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">Budget Items</h3>
+                <button onclick="openAdminModal('budget')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Budget Item</button>
+              </div>
+              <div class="p-6 glass rounded-xl overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Category</th><th class="p-4">Cost</th><th class="p-4">Pledged</th><th class="p-4">Actions</th></tr></thead>
+                  <tbody id="adminBudgetTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pledge Management -->
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">Pledges</h3>
+                <button onclick="openAdminModal('pledge')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Pledge</button>
+              </div>
+              <div class="p-6 glass rounded-xl overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Amount</th><th class="p-4">Status</th><th class="p-4">Actions</th></tr></thead>
+                  <tbody id="adminPledgeTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Attendee Management -->
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">Attendees</h3>
+                <button onclick="openAdminModal('attendee')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Attendee</button>
+              </div>
+              <div class="p-6 glass rounded-xl overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Location</th><th class="p-4">Group Size</th><th class="p-4">Actions</th></tr></thead>
+                  <tbody id="adminAttendeeTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+        populateAdminTables();
+      }
+
+      function populateAdminTables() {
+        const budgetBody = document.getElementById('adminBudgetTableBody');
+        if (budgetBody) {
+          budgetBody.innerHTML = state.budgetItems.map(item => `
+            <tr class="border-b border-white border-opacity-10">
+              <td class="p-4">${item.name}</td>
+              <td class="p-4">${item.category}</td>
+              <td class="p-4">${formatCurrency(item.cost)}</td>
+              <td class="p-4">${formatCurrency(item.pledged)}</td>
+              <td class="p-4">
+                <button onclick="openAdminModal('budget', ${item.id})" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
+                <button onclick="deleteAdminItem('budget', ${item.id})" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        const pledgeBody = document.getElementById('adminPledgeTableBody');
+        if (pledgeBody) {
+          pledgeBody.innerHTML = state.pledges.map(pledge => `
+            <tr class="border-b border-white border-opacity-10">
+              <td class="p-4">${pledge.name}</td>
+              <td class="p-4">${formatCurrency(pledge.amount)}</td>
+              <td class="p-4 capitalize">${pledge.status}</td>
+              <td class="p-4">
+                <button onclick="openAdminModal('pledge', '${pledge.id}')" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
+                <button onclick="deleteAdminItem('pledge', '${pledge.id}')" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        const attendeeBody = document.getElementById('adminAttendeeTableBody');
+        if (attendeeBody) {
+          attendeeBody.innerHTML = state.attendees.map(attendee => `
+            <tr class="border-b border-white border-opacity-10">
+              <td class="p-4">${attendee.name}</td>
+              <td class="p-4">${attendee.location}</td>
+              <td class="p-4">${attendee.groupSize}</td>
+              <td class="p-4">
+                <button onclick="openAdminModal('attendee', '${attendee.id}')" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
+                <button onclick="deleteAdminItem('attendee', '${attendee.id}')" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      function openAdminModal(type, id = null) {
+        const modal = document.getElementById('adminFormModal');
+        const content = document.getElementById('adminFormModalContent');
+        if (!modal || !content) return;
+
+        let html = '';
+        if (type === 'budget') {
+          const item = id ? state.budgetItems.find(b => b.id === id) : {};
+          html = `
+            <h3 class="text-2xl font-bold mb-4">${id ? 'Edit' : 'Add'} Budget Item</h3>
+            <form id="adminBudgetForm" class="space-y-4">
+              <input type="hidden" name="id" value="${id || ''}">
+              <input name="name" type="text" placeholder="Item Name" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${item.name || ''}" required>
+              <input name="category" type="text" placeholder="Category" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${item.category || ''}" required>
+              <input name="cost" type="number" placeholder="Cost" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${item.cost || ''}" required>
+              <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" onclick="closeModal('adminFormModal')" class="px-4 py-2 bg-gray-600 rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 rounded-lg">Save</button>
+              </div>
+            </form>
+          `;
+        } else if (type === 'pledge') {
+          const pledge = id ? state.pledges.find(p => p.id === id) : {};
+          html = `
+            <h3 class="text-2xl font-bold mb-4">${id ? 'Edit' : 'Add'} Pledge</h3>
+            <form id="adminPledgeForm" class="space-y-4">
+              <input type="hidden" name="id" value="${id || ''}">
+              <input name="name" type="text" placeholder="Contributor Name" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${pledge.name || ''}" required>
+              <input name="amount" type="number" placeholder="Amount" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${pledge.amount || ''}" required>
+              <select name="status" class="w-full p-3 glass rounded bg-black bg-opacity-20">
+                <option value="balance" ${pledge.status === 'balance' ? 'selected' : ''}>Balance</option>
+                <option value="cleared" ${pledge.status === 'cleared' ? 'selected' : ''}>Cleared</option>
+                <option value="pending" ${pledge.status === 'pending' ? 'selected' : ''}>Pending</option>
+              </select>
+              <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" onclick="closeModal('adminFormModal')" class="px-4 py-2 bg-gray-600 rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 rounded-lg">Save</button>
+              </div>
+            </form>
+          `;
+        } else if (type === 'attendee') {
+          const attendee = id ? state.attendees.find(a => a.id === id) : {};
+          html = `
+            <h3 class="text-2xl font-bold mb-4">${id ? 'Edit' : 'Add'} Attendee</h3>
+            <form id="adminAttendeeForm" class="space-y-4">
+              <input type="hidden" name="id" value="${id || ''}">
+              <input name="name" type="text" placeholder="Full Name" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.name || ''}" required>
+              <input name="location" type="text" placeholder="Location" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.location || ''}" required>
+              <input name="groupSize" type="number" placeholder="Group Size" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.groupSize || ''}" min="1" required>
+              <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" onclick="closeModal('adminFormModal')" class="px-4 py-2 bg-gray-600 rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 rounded-lg">Save</button>
+              </div>
+            </form>
+          `;
+        }
+
+        content.innerHTML = html;
+        modal.classList.remove('hidden');
+
+        if (type === 'budget') {
+          document.getElementById('adminBudgetForm').addEventListener('submit', saveAdminBudgetItem);
+        } else if (type === 'pledge') {
+          document.getElementById('adminPledgeForm').addEventListener('submit', saveAdminPledge);
+        } else if (type === 'attendee') {
+          document.getElementById('adminAttendeeForm').addEventListener('submit', saveAdminAttendee);
+        }
+      }
+
+      function saveAdminBudgetItem(event) {
+        event.preventDefault();
+        const form = event.target;
+        const id = form.id.value ? parseInt(form.id.value) : null;
+        const name = form.name.value;
+        const category = form.category.value;
+        const cost = parseInt(form.cost.value);
+
+        if (id) {
+          const item = state.budgetItems.find(b => b.id === id);
+          if (item) {
+            item.name = name;
+            item.category = category;
+            item.cost = cost;
+          }
+        } else {
+          const newItem = {
+            id: Math.max(...state.budgetItems.map(i => i.id)) + 1,
+            name,
+            category,
+            cost,
+            pledged: 0,
+            status: 'available'
+          };
+          state.budgetItems.push(newItem);
+        }
+        closeModal('adminFormModal');
+        updateAdminTab();
+        showNotification('Success', `Budget item has been ${id ? 'updated' : 'added'}.`, 'success');
+      }
+
+      function saveAdminPledge(event) {
+        event.preventDefault();
+        const form = event.target;
+        const id = form.id.value;
+        const name = form.name.value;
+        const amount = parseInt(form.amount.value);
+        const status = form.status.value;
+
+        if (id) {
+          const pledge = state.pledges.find(p => p.id === id);
+          if (pledge) {
+            pledge.name = name;
+            pledge.amount = amount;
+            pledge.status = status;
+          }
+        } else {
+          const newPledge = {
+            id: generatePledgeId(),
+            name,
+            amount,
+            status,
+            date: new Date().toISOString().split('T')[0],
+            items: [],
+            email: 'admin@example.com',
+            phone: ''
+          };
+          state.pledges.push(newPledge);
+        }
+        closeModal('adminFormModal');
+        updateAdminTab();
+        showNotification('Success', `Pledge has been ${id ? 'updated' : 'added'}.`, 'success');
+      }
+
+      function saveAdminAttendee(event) {
+        event.preventDefault();
+        const form = event.target;
+        const id = form.id.value;
+        const name = form.name.value;
+        const location = form.location.value;
+        const groupSize = parseInt(form.groupSize.value);
+
+        if (id) {
+          const attendee = state.attendees.find(a => a.id === id);
+          if (attendee) {
+            attendee.name = name;
+            attendee.location = location;
+            attendee.groupSize = groupSize;
+          }
+        } else {
+          const newAttendee = {
+            id: generateAttendeeId(),
+            name,
+            location,
+            groupSize
+          };
+          state.attendees.push(newAttendee);
+        }
+        closeModal('adminFormModal');
+        updateAdminTab();
+        showNotification('Success', `Attendee has been ${id ? 'updated' : 'added'}.`, 'success');
+      }
+
+      function deleteAdminItem(type, id) {
+        if (!confirm(`Are you sure you want to delete this ${type}? This action cannot be undone.`)) return;
+
+        if (type === 'budget') {
+          state.budgetItems = state.budgetItems.filter(item => item.id !== id);
+        } else if (type === 'pledge') {
+          state.pledges = state.pledges.filter(pledge => pledge.id !== id);
+        } else if (type === 'attendee') {
+          state.attendees = state.attendees.filter(attendee => attendee.id !== id);
+        }
+
+        updateAdminTab();
+        showNotification('Deleted', `The ${type} has been deleted.`, 'info');
+      }
+
+      function toggleAdminMode() {
+        state.isAdminMode = !state.isAdminMode;
+        showNotification('Admin Mode', `Admin mode has been ${state.isAdminMode ? 'enabled' : 'disabled'}.`, 'info');
+        
+        // Refresh current tab
+        const buttonToReactivate = document.querySelector('.nav-btn.tab-active');
+        if (buttonToReactivate) buttonToReactivate.click();
+      }
+
+      function exportData() {
+        const dataStr = JSON.stringify(state, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        const exportFileDefaultName = 'wedding_dashboard_data.json';
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        showNotification('Data Exported', 'All dashboard data has been exported.', 'success');
+      }
+
+      function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = e => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              try {
+                const newState = JSON.parse(event.target.result);
+                if (newState.budgetItems && newState.pledges) {
+                  state.budgetItems = newState.budgetItems;
+                  state.pledges = newState.pledges;
+                  state.attendees = newState.attendees || [];
+                  state.weddingDate = newState.weddingDate;
+                  state.selectedItems = [];
+                  
+                  showNotification('Import Successful', 'Data has been imported successfully.', 'success');
+                  const buttonToReactivate = document.querySelector('.nav-btn.tab-active');
+                  if (buttonToReactivate) {
+                    buttonToReactivate.click();
+                  } else {
+                    document.querySelector('.nav-btn').click();
+                  }
+                } else {
+                  throw new Error('Invalid data structure');
+                }
+              } catch (error) {
+                showNotification('Import Failed', `Error parsing JSON file: ${error.message}`, 'error');
+              }
+            };
+            reader.readAsText(file);
+          }
+        };
+        input.click();
+      }
+
+      // Pledge action functions
+      function viewPledge(pledgeId) {
+        const pledge = state.pledges.find(p => p.id === pledgeId);
+        if (!pledge) return;
+
+        
+        const modal = document.getElementById('pledgeModal');
+        const modalContent = document.getElementById('pledgeModalContent');
+        if (!modal || !modalContent) return;
+
+        
+        const itemNames = pledge.items.map(itemId => {
+          const item = state.budgetItems.find(b => b.id === itemId);
+          return item ? item.name : 'General Contribution';
+        }).join(', ');
+
+        modalContent.innerHTML = `
+          <h3 class="text-2xl font-bold text-white mb-4">Pledge Details (${pledge.id})</h3>
+          <div class="space-y-4 text-gray-300">
+            <p><strong>Contributor:</strong> ${pledge.name}</p>
+            <p><strong>Email:</strong> ${pledge.email || 'Not Provided'}</p>
+            <p><strong>Phone:</strong> ${pledge.phone || 'Not Provided'}</p>
+            <p><strong>Location:</strong> ${pledge.location || 'Not Provided'}</p>
+            <p><strong>Date:</strong> ${pledge.date ? new Date(pledge.date).toLocaleDateString() : 'Not Set'}</p>
+            <p><strong>Amount:</strong> ${formatCurrency(pledge.amount)}</p>
+            <p><strong>Status:</strong> <span class="capitalize">${pledge.status}</span></p>
+            <p><strong>Items:</strong> ${itemNames}</p>
+            <p><strong>Comment:</strong> "${pledge.comment || 'None'}"</p>
+          </div>
+          <button onclick="closeModal('pledgeModal')" class="mt-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 w-full">Close</button>
+        `;
+        
+        modal.classList.remove('hidden');
+      }
+
+      function updatePledgeStatus(pledgeId) {
+        const pledge = state.pledges.find(p => p.id === pledgeId);
+        if (!pledge) return;
+
+        const modal = document.getElementById('statusUpdateModal');
+        const modalContent = document.getElementById('statusUpdateModalContent');
+        if (!modal || !modalContent) return;
+
+        modalContent.innerHTML = `
+          <h3 class="text-2xl font-bold text-white mb-4">Update Pledge Status</h3>
+          <p class="text-gray-300 mb-4">Updating status for ${pledge.name}'s pledge (${pledge.id}).</p>
+          <select id="newStatusSelector" class="w-full p-3 glass rounded text-white border border-white border-opacity-20 bg-black bg-opacity-20">
+            <option value="balance" ${pledge.status === 'balance' ? 'selected' : ''}>Balance</option>
+            <option value="cleared" ${pledge.status === 'cleared' ? 'selected' : ''}>Cleared</option>
+            <option value="pending" ${pledge.status === 'pending' ? 'selected' : ''}>Pending</option>
+          </select>
+          <div class="mt-6 flex space-x-4">
+            <button onclick="savePledgeStatus('${pledge.id}')" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Save</button>
+            <button onclick="closeModal('statusUpdateModal')" class="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Cancel</button>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+      }
+
+      function savePledgeStatus(pledgeId) {
+        const pledge = state.pledges.find(p => p.id === pledgeId);
+        if (!pledge) return;
+
+        const newStatus = document.getElementById('newStatusSelector').value;
+        pledge.status = newStatus;
+
+        closeModal('statusUpdateModal');
+        showNotification('Status Updated', `Pledge ${pledge.id} status changed to ${newStatus}.`, 'success');
+        
+        if(state.currentTab === 'pledges') updatePledgesTab();
+        if(state.currentTab === 'dashboard') updateDashboard();
+        if(state.currentTab === 'analytics') updateAnalyticsTab();
+      }
+
+      function deletePledge(pledgeId) {
+        if (!confirm('Are you sure you want to delete this pledge? This action cannot be undone.')) {
+          return;
+        }
+        
+        state.pledges = state.pledges.filter(p => p.id !== pledgeId);
+        
+        showNotification('Pledge Deleted', `Pledge ${pledgeId} has been deleted.`, 'info');
+        
+        updatePledgesTab();
+        updateDashboard();
+        updateAnalyticsTab();
+      }
+
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add('hidden');
+        }
+      }
+
+      // Initializer
+      document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+          sidebar.classList.toggle('-translate-x-full');
+          overlay.classList.toggle('hidden');
+        }
+
+        mobileMenuButton.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        document.querySelectorAll('#sidebar .nav-btn').forEach(button => {
+          button.addEventListener('click', () => {
+            if (window.innerWidth < 768) { // Tailwind's md breakpoint
+              toggleSidebar();
+            }
+          });
+        });
+
+        document.getElementById('attendeeForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          
+          const name = document.getElementById('attendeeName').value.trim();
+          const location = document.getElementById('attendeeLocation').value.trim();
+          const groupSize = parseInt(document.getElementById('attendeeGroupSize').value);
+          
+          if (!name || !location || !groupSize || groupSize < 1) {
+            showNotification('Form Incomplete', 'Please fill in all fields correctly.', 'error');
+            return;
+          }
+
+          const newAttendee = {
+            id: generateAttendeeId(),
+            name: name,
+            location: location,
+            groupSize: groupSize,
+          };
+
+          state.attendees.push(newAttendee);
+          
+          this.reset();
+          closeModal('attendeeFormModal');
+          
+          showNotification('Registration Successful', `Thank you, ${name}! Your attendance has been registered.`, 'success');
+          
+          if (state.currentTab === 'attendees') {
+            updateAttendeesTab();
+          }
+        });
+
+        document.querySelectorAll('.footer-year').forEach(el => {
+          el.textContent = new Date().getFullYear();
+        });
+
+        // Set default tab on load by clicking the first nav button
+        document.querySelector('.nav-btn').click();
+      });
+
+      function openItemSelectionModal() {
+        const modal = document.getElementById('itemSelectionModal');
+        const tbody = document.getElementById('itemSelectionTableBody');
+        if (!modal || !tbody) return;
+
+        const availableItems = state.budgetItems.filter(item => item.cost > item.pledged);
+
+        tbody.innerHTML = availableItems.map(item => {
+          const remaining = item.cost - item.pledged;
+          const selectedItem = state.selectedItems.find(si => si.id === item.id);
+          const isChecked = !!selectedItem;
+          const qty = 1;
+          const unitPrice = selectedItem ? selectedItem.amount : 0;
+          const amount = selectedItem ? selectedItem.amount : 0;
+
+          return `
+            <tr class="border-b border-white border-opacity-10 item-row" data-id="${item.id}">
+              <td class="p-4 text-center">
+                <input type="checkbox" class="item-checkbox" onchange="updateModalTotals()" ${isChecked ? 'checked' : ''}>
+              </td>
+              <td><p class="text-white font-medium">${item.name}</p></td>
+              <td><p class="text-gray-300 text-sm">${item.category}</p></td>
+              <td><p class="text-gray-300 font-mono">${formatCurrency(remaining)}</p></td>
+              <td class="p-2">
+                <input type="number" value="${qty}" min="1" oninput="updateRowAmount(this)" class="w-20 p-2 glass rounded text-white text-center border border-white border-opacity-20 bg-black bg-opacity-20 pledge-quantity-input">
+              </td>
+              <td class="p-2">
+                <input type="number" value="${unitPrice}" min="0" oninput="updateRowAmount(this)" class="w-32 p-2 glass rounded text-white text-center border border-white border-opacity-20 bg-black bg-opacity-20 pledge-unit-price-input">
+              </td>
+              <td class="p-2">
+                <input type="text" value="${formatCurrency(amount)}" class="w-32 p-2 glass rounded text-white text-center border-white border-opacity-20 bg-gray-800 pledge-amount-display" disabled>
+                <input type="hidden" class="pledge-amount-input" value="${amount}">
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        updateModalTotals();
+        modal.classList.remove('hidden');
+      }
+
+      function updateRowAmount(inputElement) {
+        const row = inputElement.closest('.item-row');
+        const qtyInput = row.querySelector('.pledge-quantity-input');
+        const priceInput = row.querySelector('.pledge-unit-price-input');
+        const amountDisplay = row.querySelector('.pledge-amount-display');
+        const amountInput = row.querySelector('.pledge-amount-input');
+        
+        const qty = parseInt(qtyInput.value) || 0;
+        const price = parseInt(priceInput.value) || 0;
+        const total = qty * price;
+
+        amountDisplay.value = formatCurrency(total);
+        amountInput.value = total;
+
+        updateModalTotals();
+      }
+
+      function toggleAllItems(masterCheckbox) {
+        document.querySelectorAll('#itemSelectionTableBody .item-checkbox').forEach(checkbox => {
+          checkbox.checked = masterCheckbox.checked;
+        });
+        updateModalTotals();
+      }
+
+      function updateModalTotals() {
+        const rows = document.querySelectorAll('#itemSelectionTableBody .item-row');
+        let totalAmount = 0;
+        let selectedCount = 0;
+
+        rows.forEach(row => {
+          const checkbox = row.querySelector('.item-checkbox');
+          const qtyInput = row.querySelector('.pledge-quantity-input');
+          const priceInput = row.querySelector('.pledge-unit-price-input');
+          const amountInput = row.querySelector('.pledge-amount-input');
+          
+          const isRowEnabled = checkbox.checked;
+          qtyInput.disabled = !isRowEnabled;
+          priceInput.disabled = !isRowEnabled;
+
+          if (isRowEnabled) {
+            selectedCount++;
+            totalAmount += parseInt(amountInput.value) || 0;
+          }
+        });
+
+        document.getElementById('modal-selected-items-count').textContent = selectedCount;
+        document.getElementById('modal-total-amount').textContent = formatCurrency(totalAmount);
+      }
+
+      function addSelectedItemsToPledge() {
+        const selectedRows = document.querySelectorAll('#itemSelectionTableBody .item-row');
+        
+        state.selectedItems = []; // Reset and add new selection
+
+        selectedRows.forEach(row => {
+          const checkbox = row.querySelector('.item-checkbox');
+          if (checkbox.checked) {
+              const itemId = parseInt(row.dataset.id);
+              const budgetItem = state.budgetItems.find(b => b.id === itemId);
+              const amount = parseInt(row.querySelector('.pledge-amount-input').value);
+
+              if (budgetItem && amount > 0) {
+                  state.selectedItems.push({
+                      id: itemId,
+                      name: budgetItem.name,
+                      cost: budgetItem.cost,
+                      pledged: budgetItem.pledged,
+                      amount: amount
+                  });
+              }
+          }
+        });
+
+        updateSelectedItems();
+        closeModal('itemSelectionModal');
+        showNotification('Items Updated', `${state.selectedItems.length} items added to your pledge.`, 'success');
+      }
+
+      // Attendees tab functions
+      function updateAttendeesTab() {
+          updateAttendeesTable();
+      }
+
+      function openAttendeeForm() {
+          document.getElementById('attendeeFormModal').classList.remove('hidden');
+      }
+
+      function updateAttendeesTable() {
+          const tbody = document.getElementById('attendeesTableBody');
+          tbody.innerHTML = '';
+
+          if (!tbody) return;
+
+          state.attendees.forEach(attendee => {
+              const row = document.createElement('tr');
+              row.className = 'border-b border-white border-opacity-10';
+              row.innerHTML = `
+                  <td class="p-4">${attendee.id}</td>
+                  <td class="p-4">${attendee.name}</td>
+                  <td class="p-4">${attendee.location}</td>
+                  <td class="p-4 text-center">${attendee.groupSize}</td>
+              `;
+              tbody.appendChild(row);
+          });
+      }
   </script>
 </body>
 </html>
