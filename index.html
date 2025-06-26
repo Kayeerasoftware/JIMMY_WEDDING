@@ -53,7 +53,30 @@
       transform: translateX(100%);
       background-color: #8b5cf6;
     }
+    /* Admin panel tab styles */
+    .admin-tab-btn {
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .admin-tab-btn.tab-active {
+      background: rgba(139, 92, 246, 0.2);
+      color: #fff;
+      font-weight: 700;
+      border-bottom: 2px solid #8b5cf6;
+    }
+    .admin-tab-btn.tab-inactive {
+      background: transparent;
+      color: #a0aec0;
+    }
+    .admin-tab-btn.tab-inactive:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+    .admin-panel-tab {
+      margin-bottom: 2rem;
+    }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
@@ -89,7 +112,7 @@
           <button onclick="switchTab('attendees')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Attendees</button>
           <button onclick="switchTab('budget')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Budget</button>
           <button onclick="switchTab('analytics')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Analytics</button>
-          <button onclick="switchTab('admin')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Admin</button>
+          <button id="adminNavBtn" onclick="switchTab('admin')" class="w-full text-left nav-btn px-4 py-2.5 rounded-lg tab-inactive">Admin</button>
         </div>
       </div>
       <div class="text-center text-xs text-gray-400 hidden md:block">
@@ -362,7 +385,6 @@
     // Global state management
     let state = {
       currentTab: 'dashboard',
-      isAdminMode: false,
       budgetItems: [
         // CHURCH
         { id: 1, name: 'Church Fees', category: 'Church', cost: 220000, pledged: 0, status: 'available' },
@@ -1407,121 +1429,279 @@
         if (!adminContainer) return;
 
         adminContainer.innerHTML = `
-          <div class="space-y-8">
-            <div>
-              <h3 class="text-xl font-semibold text-white mb-4">Admin Mode</h3>
-              <div class="flex items-center justify-between p-4 glass rounded-lg">
-                <p class="text-gray-300">Enable admin mode to access editing and deleting functionalities.</p>
-                <label for="adminToggle" class="flex items-center cursor-pointer">
-                  <div class="relative">
-                    <input type="checkbox" id="adminToggle" class="sr-only" ${state.isAdminMode ? 'checked' : ''} onchange="toggleAdminMode()">
-                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
-                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                  </div>
-                </label>
-              </div>
+          <div>
+            <div class="flex space-x-2 mb-6">
+              <button class="admin-tab-btn px-4 py-2 rounded-lg tab-active" data-tab="budget-management">Budget Management</button>
+              <button class="admin-tab-btn px-4 py-2 rounded-lg tab-inactive" data-tab="pledge-management">Pledge Management</button>
+              <button class="admin-tab-btn px-4 py-2 rounded-lg tab-inactive" data-tab="attendee-management">Attendee Management</button>
+              <button class="admin-tab-btn px-4 py-2 rounded-lg tab-inactive" data-tab="budget-pledge-analysis">Budget-Pledge Analysis</button>
             </div>
-            
-            <div>
-              <h3 class="text-xl font-semibold text-white mb-4">Data Management</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button onclick="exportData()" class="w-full p-4 glass rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all">Export Data (JSON)</button>
-                <button onclick="importData()" class="w-full p-4 glass rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all">Import Data (JSON)</button>
-              </div>
-            </div>
-
-            <!-- Budget Management -->
-            <div>
+            <div id="budget-management-panel" class="admin-panel-tab">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-white">Budget Items</h3>
-                <button onclick="openAdminModal('budget')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Budget Item</button>
+                <button onclick="openAdminModal('budget')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Add Budget Item</button>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <input id="adminBudgetSearch" type="text" placeholder="Search by name..." class="p-2 glass rounded border border-white border-opacity-20 text-black" style="min-width:180px;">
+                <select id="adminBudgetCategory" class="p-2 glass rounded border border-white border-opacity-20 text-black">
+                  <option value="all">All Categories</option>
+                </select>
+                <button onclick="exportAdminTablePDF('budget')" class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Export PDF</button>
+                <button onclick="printAdminTable('budget')" class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Print</button>
               </div>
               <div class="p-6 glass rounded-xl overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left" id="adminBudgetTable">
                   <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Category</th><th class="p-4">Cost</th><th class="p-4">Pledged</th><th class="p-4">Actions</th></tr></thead>
                   <tbody id="adminBudgetTableBody"></tbody>
                 </table>
               </div>
             </div>
-
-            <!-- Pledge Management -->
-            <div>
+            <div id="pledge-management-panel" class="admin-panel-tab hidden">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-white">Pledges</h3>
-                <button onclick="openAdminModal('pledge')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Pledge</button>
+                <button onclick="openAdminModal('pledge')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Add Pledge</button>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <input id="adminPledgeSearch" type="text" placeholder="Search by name or ID..." class="p-2 glass rounded border border-white border-opacity-20 text-black" style="min-width:180px;">
+                <select id="adminPledgeStatus" class="p-2 glass rounded border border-white border-opacity-20 text-black">
+                  <option value="all">All Statuses</option>
+                  <option value="balance">Balance</option>
+                  <option value="cleared">Cleared</option>
+                  <option value="pending">Pending</option>
+                </select>
+                <button onclick="exportAdminTablePDF('pledge')" class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Export PDF</button>
+                <button onclick="printAdminTable('pledge')" class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Print</button>
               </div>
               <div class="p-6 glass rounded-xl overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left" id="adminPledgeTable">
                   <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Amount</th><th class="p-4">Status</th><th class="p-4">Actions</th></tr></thead>
                   <tbody id="adminPledgeTableBody"></tbody>
                 </table>
               </div>
             </div>
-
-            <!-- Attendee Management -->
-            <div>
+            <div id="attendee-management-panel" class="admin-panel-tab hidden">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-white">Attendees</h3>
-                <button onclick="openAdminModal('attendee')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50" ${!state.isAdminMode ? 'disabled' : ''}>Add Attendee</button>
+                <button onclick="openAdminModal('attendee')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Add Attendee</button>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <input id="adminAttendeeSearch" type="text" placeholder="Search by name..." class="p-2 glass rounded border border-white border-opacity-20 text-black" style="min-width:180px;">
+                <select id="adminAttendeeLocation" class="p-2 glass rounded border border-white border-opacity-20 text-black">
+                  <option value="all">All Locations</option>
+                </select>
+                <button onclick="exportAdminTablePDF('attendee')" class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Export PDF</button>
+                <button onclick="printAdminTable('attendee')" class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Print</button>
               </div>
               <div class="p-6 glass rounded-xl overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left" id="adminAttendeeTable">
                   <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Location</th><th class="p-4">Group Size</th><th class="p-4">Actions</th></tr></thead>
                   <tbody id="adminAttendeeTableBody"></tbody>
                 </table>
               </div>
             </div>
+            <div id="budget-pledge-analysis-panel" class="admin-panel-tab hidden">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">Budget-Pledge Analysis</h3>
+              </div>
+              <div id="adminAnalysisSummary" class="mb-6 p-4 glass rounded-xl grid grid-cols-1 md:grid-cols-4 gap-4 text-center"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="p-4 glass rounded-xl">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-lg font-semibold">Budgeted vs Pledged (Top 10 Items)</h4>
+                    <button id="exportBarChartBtn" title="Export chart as PNG" class="ml-2 px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800">Export PNG</button>
+                  </div>
+                  <div style="position:relative;height:180px"><canvas id="adminAnalysisBarChart"></canvas></div>
+                </div>
+                <div class="p-4 glass rounded-xl">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-lg font-semibold">Overall % Covered</h4>
+                    <button id="exportDoughnutChartBtn" title="Export chart as PNG" class="ml-2 px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800">Export PNG</button>
+                  </div>
+                  <div style="position:relative;height:180px"><canvas id="adminAnalysisDoughnutChart"></canvas></div>
+                </div>
+              </div>
+              <div class="mb-6 p-4 glass rounded-xl">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-lg font-semibold">Pledged by Category</h4>
+                  <button id="exportCategoryChartBtn" title="Export chart as PNG" class="ml-2 px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-800">Export PNG</button>
+                </div>
+                <div style="position:relative;height:120px"><canvas id="adminAnalysisCategoryChart"></canvas></div>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <input id="adminAnalysisSearch" type="text" placeholder="Search by item or category..." class="p-2 glass rounded border border-white border-opacity-20 text-black" style="min-width:180px;">
+                <button onclick="exportAdminTablePDF('analysis')" class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Export PDF</button>
+                <button onclick="printAdminTable('analysis')" class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Print</button>
+              </div>
+              <div class="p-6 glass rounded-xl overflow-x-auto">
+                <table class="w-full text-left" id="adminAnalysisTable">
+                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Item</th><th class="p-4">Category</th><th class="p-4">Budgeted</th><th class="p-4">Pledged</th><th class="p-4">Remaining</th><th class="p-4">% Covered</th></tr></thead>
+                  <tbody id="adminAnalysisTableBody"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         `;
-        populateAdminTables();
+        // Tab switching logic
+        const tabBtns = adminContainer.querySelectorAll('.admin-tab-btn');
+        const tabPanels = adminContainer.querySelectorAll('.admin-panel-tab');
+        tabBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            tabBtns.forEach(b => b.classList.remove('tab-active'));
+            tabBtns.forEach(b => b.classList.add('tab-inactive'));
+            this.classList.add('tab-active');
+            this.classList.remove('tab-inactive');
+            const tab = this.getAttribute('data-tab');
+            tabPanels.forEach(panel => {
+              if(panel.id === tab + '-panel') {
+                panel.classList.remove('hidden');
+              } else {
+                panel.classList.add('hidden');
+              }
+            });
+          });
+        });
+        // Default to first tab
+        tabBtns[0].click();
+        setupAdminFilters();
+        setupAdminAnalysis();
       }
 
-      function populateAdminTables() {
-        const budgetBody = document.getElementById('adminBudgetTableBody');
-        if (budgetBody) {
-          budgetBody.innerHTML = state.budgetItems.map(item => `
-            <tr class="border-b border-white border-opacity-10">
-              <td class="p-4">${item.name}</td>
-              <td class="p-4">${item.category}</td>
-              <td class="p-4">${formatCurrency(item.cost)}</td>
-              <td class="p-4">${formatCurrency(item.pledged)}</td>
-              <td class="p-4">
-                <button onclick="openAdminModal('budget', ${item.id})" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
-                <button onclick="deleteAdminItem('budget', ${item.id})" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
-              </td>
-            </tr>
-          `).join('');
+      function setupAdminFilters() {
+        // Budget
+        const catSet = new Set(state.budgetItems.map(i => i.category));
+        const catSelect = document.getElementById('adminBudgetCategory');
+        if (catSelect) {
+          catSelect.innerHTML = '<option value="all">All Categories</option>' + Array.from(catSet).map(cat => `<option value="${cat}">${cat}</option>`).join('');
         }
+        document.getElementById('adminBudgetSearch').addEventListener('input', filterAdminBudgetTable);
+        document.getElementById('adminBudgetCategory').addEventListener('change', filterAdminBudgetTable);
+        filterAdminBudgetTable();
+        // Pledge
+        document.getElementById('adminPledgeSearch').addEventListener('input', filterAdminPledgeTable);
+        document.getElementById('adminPledgeStatus').addEventListener('change', filterAdminPledgeTable);
+        filterAdminPledgeTable();
+        // Attendee
+        const locSet = new Set(state.attendees.map(a => a.location));
+        const locSelect = document.getElementById('adminAttendeeLocation');
+        if (locSelect) {
+          locSelect.innerHTML = '<option value="all">All Locations</option>' + Array.from(locSet).map(loc => `<option value="${loc}">${loc}</option>`).join('');
+        }
+        document.getElementById('adminAttendeeSearch').addEventListener('input', filterAdminAttendeeTable);
+        document.getElementById('adminAttendeeLocation').addEventListener('change', filterAdminAttendeeTable);
+        filterAdminAttendeeTable();
+      }
 
-        const pledgeBody = document.getElementById('adminPledgeTableBody');
-        if (pledgeBody) {
-          pledgeBody.innerHTML = state.pledges.map(pledge => `
-            <tr class="border-b border-white border-opacity-10">
-              <td class="p-4">${pledge.name}</td>
-              <td class="p-4">${formatCurrency(pledge.amount)}</td>
-              <td class="p-4 capitalize">${pledge.status}</td>
-              <td class="p-4">
-                <button onclick="openAdminModal('pledge', '${pledge.id}')" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
-                <button onclick="deleteAdminItem('pledge', '${pledge.id}')" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
-              </td>
-            </tr>
-          `).join('');
-        }
+      function filterAdminBudgetTable() {
+        const search = document.getElementById('adminBudgetSearch').value.toLowerCase();
+        const cat = document.getElementById('adminBudgetCategory').value;
+        const tbody = document.getElementById('adminBudgetTableBody');
+        tbody.innerHTML = state.budgetItems.filter(item =>
+          (cat === 'all' || item.category === cat) &&
+          (item.name.toLowerCase().includes(search) || item.category.toLowerCase().includes(search))
+        ).map(item => `
+          <tr class="border-b border-white border-opacity-10">
+            <td class="p-4">${item.name}</td>
+            <td class="p-4">${item.category}</td>
+            <td class="p-4">${formatCurrency(item.cost)}</td>
+            <td class="p-4">${formatCurrency(item.pledged)}</td>
+            <td class="p-4">
+              <button onclick="openAdminModal('budget', ${item.id})" class="text-blue-400 hover:text-blue-300 mr-2">Edit</button>
+              <button onclick="deleteAdminItem('budget', ${item.id})" class="text-red-400 hover:text-red-300">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
 
-        const attendeeBody = document.getElementById('adminAttendeeTableBody');
-        if (attendeeBody) {
-          attendeeBody.innerHTML = state.attendees.map(attendee => `
-            <tr class="border-b border-white border-opacity-10">
-              <td class="p-4">${attendee.name}</td>
-              <td class="p-4">${attendee.location}</td>
-              <td class="p-4">${attendee.groupSize}</td>
-              <td class="p-4">
-                <button onclick="openAdminModal('attendee', '${attendee.id}')" class="text-blue-400 hover:text-blue-300 mr-2" ${!state.isAdminMode ? 'disabled' : ''}>Edit</button>
-                <button onclick="deleteAdminItem('attendee', '${attendee.id}')" class="text-red-400 hover:text-red-300" ${!state.isAdminMode ? 'disabled' : ''}>Delete</button>
-              </td>
-            </tr>
-          `).join('');
+      function filterAdminPledgeTable() {
+        const search = document.getElementById('adminPledgeSearch').value.toLowerCase();
+        const status = document.getElementById('adminPledgeStatus').value;
+        const tbody = document.getElementById('adminPledgeTableBody');
+        tbody.innerHTML = state.pledges.filter(pledge =>
+          (status === 'all' || pledge.status === status) &&
+          (pledge.name.toLowerCase().includes(search) || pledge.id.toLowerCase().includes(search))
+        ).map(pledge => `
+          <tr class="border-b border-white border-opacity-10">
+            <td class="p-4">${pledge.name}</td>
+            <td class="p-4">${formatCurrency(pledge.amount)}</td>
+            <td class="p-4 capitalize">${pledge.status}</td>
+            <td class="p-4">
+              <button onclick="openAdminModal('pledge', '${pledge.id}')" class="text-blue-400 hover:text-blue-300 mr-2">Edit</button>
+              <button onclick="deleteAdminItem('pledge', '${pledge.id}')" class="text-red-400 hover:text-red-300">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      function filterAdminAttendeeTable() {
+        const search = document.getElementById('adminAttendeeSearch').value.toLowerCase();
+        const loc = document.getElementById('adminAttendeeLocation').value;
+        const tbody = document.getElementById('adminAttendeeTableBody');
+        tbody.innerHTML = state.attendees.filter(attendee =>
+          (loc === 'all' || attendee.location === loc) &&
+          (attendee.name.toLowerCase().includes(search) || attendee.location.toLowerCase().includes(search))
+        ).map(attendee => `
+          <tr class="border-b border-white border-opacity-10">
+            <td class="p-4">${attendee.name}</td>
+            <td class="p-4">${attendee.location}</td>
+            <td class="p-4">${attendee.groupSize}</td>
+            <td class="p-4">
+              <button onclick="openAdminModal('attendee', '${attendee.id}')" class="text-blue-400 hover:text-blue-300 mr-2">Edit</button>
+              <button onclick="deleteAdminItem('attendee', '${attendee.id}')" class="text-red-400 hover:text-red-300">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      function exportAdminTablePDF(type) {
+        let doc = new window.jspdf.jsPDF();
+        let table, title;
+        if (type === 'budget') {
+          table = document.getElementById('adminBudgetTable');
+          title = 'Budget Items';
+        } else if (type === 'pledge') {
+          table = document.getElementById('adminPledgeTable');
+          title = 'Pledges';
+        } else {
+          table = document.getElementById('adminAttendeeTable');
+          title = 'Attendees';
         }
+        doc.text(title, 10, 10);
+        let rows = [];
+        let headers = [];
+        table.querySelectorAll('thead tr th').forEach(th => headers.push(th.textContent.trim()));
+        table.querySelectorAll('tbody tr').forEach(tr => {
+          let row = [];
+          tr.querySelectorAll('td').forEach((td, i) => {
+            // Exclude Actions column
+            if (headers[i] !== 'Actions') row.push(td.textContent.trim());
+          });
+          if (row.length) rows.push(row);
+        });
+        doc.autoTable({ head: [headers.filter(h => h !== 'Actions')], body: rows, startY: 20 });
+        doc.save(title + '.pdf');
+      }
+
+      function printAdminTable(type) {
+        let table, title;
+        if (type === 'budget') {
+          table = document.getElementById('adminBudgetTable');
+          title = 'Budget Items';
+        } else if (type === 'pledge') {
+          table = document.getElementById('adminPledgeTable');
+          title = 'Pledges';
+        } else {
+          table = document.getElementById('adminAttendeeTable');
+          title = 'Attendees';
+        }
+        let printWindow = window.open('', '', 'height=600,width=900');
+        printWindow.document.write('<html><head><title>' + title + '</title>');
+        printWindow.document.write('<style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:8px;}th{background:#eee;}</style>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write('<h2>' + title + '</h2>');
+        printWindow.document.write(table.outerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
       }
 
       function openAdminModal(type, id = null) {
@@ -1699,140 +1879,6 @@
 
         updateAdminTab();
         showNotification('Deleted', `The ${type} has been deleted.`, 'info');
-      }
-
-      function toggleAdminMode() {
-        state.isAdminMode = !state.isAdminMode;
-        showNotification('Admin Mode', `Admin mode has been ${state.isAdminMode ? 'enabled' : 'disabled'}.`, 'info');
-        
-        // Refresh current tab
-        const buttonToReactivate = document.querySelector('.nav-btn.tab-active');
-        if (buttonToReactivate) buttonToReactivate.click();
-      }
-
-      function exportData() {
-        const dataStr = JSON.stringify(state, null, 2);
-        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-        const exportFileDefaultName = 'wedding_dashboard_data.json';
-        
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileDefaultName);
-        linkElement.click();
-        showNotification('Data Exported', 'All dashboard data has been exported.', 'success');
-      }
-
-      function importData() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'application/json';
-        input.onchange = e => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-              try {
-                const newState = JSON.parse(event.target.result);
-                if (newState.budgetItems && newState.pledges) {
-                  state.budgetItems = newState.budgetItems;
-                  state.pledges = newState.pledges;
-                  state.attendees = newState.attendees || [];
-                  state.weddingDate = newState.weddingDate;
-                  state.selectedItems = [];
-                  
-                  showNotification('Import Successful', 'Data has been imported successfully.', 'success');
-                  const buttonToReactivate = document.querySelector('.nav-btn.tab-active');
-                  if (buttonToReactivate) {
-                    buttonToReactivate.click();
-                  } else {
-                    document.querySelector('.nav-btn').click();
-                  }
-                } else {
-                  throw new Error('Invalid data structure');
-                }
-              } catch (error) {
-                showNotification('Import Failed', `Error parsing JSON file: ${error.message}`, 'error');
-              }
-            };
-            reader.readAsText(file);
-          }
-        };
-        input.click();
-      }
-
-      // Pledge action functions
-      function viewPledge(pledgeId) {
-        const pledge = state.pledges.find(p => p.id === pledgeId);
-        if (!pledge) return;
-
-        
-        const modal = document.getElementById('pledgeModal');
-        const modalContent = document.getElementById('pledgeModalContent');
-        if (!modal || !modalContent) return;
-
-        
-        const itemNames = pledge.items.map(itemId => {
-          const item = state.budgetItems.find(b => b.id === itemId);
-          return item ? item.name : 'General Contribution';
-        }).join(', ');
-
-        modalContent.innerHTML = `
-          <h3 class="text-2xl font-bold text-white mb-4">Pledge Details (${pledge.id})</h3>
-          <div class="space-y-4 text-gray-300">
-            <p><strong>Contributor:</strong> ${pledge.name}</p>
-            <p><strong>Email:</strong> ${pledge.email || 'Not Provided'}</p>
-            <p><strong>Phone:</strong> ${pledge.phone || 'Not Provided'}</p>
-            <p><strong>Location:</strong> ${pledge.location || 'Not Provided'}</p>
-            <p><strong>Date:</strong> ${pledge.date ? new Date(pledge.date).toLocaleDateString() : 'Not Set'}</p>
-            <p><strong>Amount:</strong> ${formatCurrency(pledge.amount)}</p>
-            <p><strong>Status:</strong> <span class="capitalize">${pledge.status}</span></p>
-            <p><strong>Items:</strong> ${itemNames}</p>
-            <p><strong>Comment:</strong> "${pledge.comment || 'None'}"</p>
-          </div>
-          <button onclick="closeModal('pledgeModal')" class="mt-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 w-full">Close</button>
-        `;
-        
-        modal.classList.remove('hidden');
-      }
-
-      function updatePledgeStatus(pledgeId) {
-        const pledge = state.pledges.find(p => p.id === pledgeId);
-        if (!pledge) return;
-
-        const modal = document.getElementById('statusUpdateModal');
-        const modalContent = document.getElementById('statusUpdateModalContent');
-        if (!modal || !modalContent) return;
-
-        modalContent.innerHTML = `
-          <h3 class="text-2xl font-bold text-white mb-4">Update Pledge Status</h3>
-          <p class="text-gray-300 mb-4">Updating status for ${pledge.name}'s pledge (${pledge.id}).</p>
-          <select id="newStatusSelector" class="w-full p-3 glass rounded text-white border border-white border-opacity-20 bg-black bg-opacity-20">
-            <option value="balance" ${pledge.status === 'balance' ? 'selected' : ''}>Balance</option>
-            <option value="cleared" ${pledge.status === 'cleared' ? 'selected' : ''}>Cleared</option>
-            <option value="pending" ${pledge.status === 'pending' ? 'selected' : ''}>Pending</option>
-          </select>
-          <div class="mt-6 flex space-x-4">
-            <button onclick="savePledgeStatus('${pledge.id}')" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Save</button>
-            <button onclick="closeModal('statusUpdateModal')" class="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Cancel</button>
-          </div>
-        `;
-
-        modal.classList.remove('hidden');
-      }
-
-      function savePledgeStatus(pledgeId) {
-        const pledge = state.pledges.find(p => p.id === pledgeId);
-        if (!pledge) return;
-
-        const newStatus = document.getElementById('newStatusSelector').value;
-        pledge.status = newStatus;
-
-        closeModal('statusUpdateModal');
-        showNotification('Status Updated', `Pledge ${pledge.id} status changed to ${newStatus}.`, 'success');
-        
-        if(state.currentTab === 'pledges') updatePledgesTab();
-        if(state.currentTab === 'dashboard') updateDashboard();
-        if(state.currentTab === 'analytics') updateAnalyticsTab();
       }
 
       function deletePledge(pledgeId) {
@@ -2077,6 +2123,252 @@
         setInterval(updateCountdown, 1000); // Update every second
         updateCountdown(); // Update immediately
       }
+
+      let adminAnalysisCharts = { bar: null, doughnut: null, category: null };
+      function setupAdminAnalysis() {
+        const searchInput = document.getElementById('adminAnalysisSearch');
+        if (searchInput) {
+          searchInput.addEventListener('input', filterAdminAnalysisTable);
+        }
+        filterAdminAnalysisTable();
+      }
+
+      function filterAdminAnalysisTable() {
+        const search = document.getElementById('adminAnalysisSearch').value.toLowerCase();
+        const tbody = document.getElementById('adminAnalysisTableBody');
+        const filtered = state.budgetItems.filter(item =>
+          item.name.toLowerCase().includes(search) || item.category.toLowerCase().includes(search)
+        );
+        tbody.innerHTML = filtered.map(item => {
+          const remaining = item.cost - item.pledged;
+          const percent = item.cost > 0 ? Math.round((item.pledged / item.cost) * 100) : 0;
+          return `
+            <tr class="border-b border-white border-opacity-10">
+              <td class="p-4">${item.name}</td>
+              <td class="p-4">${item.category}</td>
+              <td class="p-4">${formatCurrency(item.cost)}</td>
+              <td class="p-4">${formatCurrency(item.pledged)}</td>
+              <td class="p-4">${formatCurrency(remaining)}</td>
+              <td class="p-4">${percent}%</td>
+            </tr>
+          `;
+        }).join('');
+        // Summary totals
+        const totalBudget = filtered.reduce((sum, i) => sum + i.cost, 0);
+        const totalPledged = filtered.reduce((sum, i) => sum + i.pledged, 0);
+        const totalRemaining = totalBudget - totalPledged;
+        const percentOverall = totalBudget > 0 ? Math.round((totalPledged / totalBudget) * 100) : 0;
+        document.getElementById('adminAnalysisSummary').innerHTML = `
+          <div><div class="text-gray-400">Total Budget</div><div class="text-2xl font-bold">${formatCurrency(totalBudget)}</div></div>
+          <div><div class="text-gray-400">Total Pledged</div><div class="text-2xl font-bold">${formatCurrency(totalPledged)}</div></div>
+          <div><div class="text-gray-400">Total Remaining</div><div class="text-2xl font-bold">${formatCurrency(totalRemaining)}</div></div>
+          <div><div class="text-gray-400">% Covered</div><div class="text-2xl font-bold">${percentOverall}%</div></div>
+        `;
+        // --- Chart rendering ---
+        // Destroy old charts if they exist
+        if (adminAnalysisCharts.bar) adminAnalysisCharts.bar.destroy();
+        if (adminAnalysisCharts.doughnut) adminAnalysisCharts.doughnut.destroy();
+        if (adminAnalysisCharts.category) adminAnalysisCharts.category.destroy();
+        // Bar chart: Top 10 items by budget
+        const topItems = [...filtered].sort((a,b) => b.cost - a.cost).slice(0,10);
+        const barLabels = topItems.map(i => i.name);
+        const barBudget = topItems.map(i => i.cost);
+        const barPledged = topItems.map(i => i.pledged);
+        adminAnalysisCharts.bar = new Chart(document.getElementById('adminAnalysisBarChart').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: barLabels,
+            datasets: [
+              { label: 'Budgeted', data: barBudget, backgroundColor: 'rgba(102,126,234,0.8)', borderRadius: 8 },
+              { label: 'Pledged', data: barPledged, backgroundColor: 'rgba(72,187,120,0.8)', borderRadius: 8 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+              x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+              y: { ticks: { color: 'white', callback: value => formatCurrency(value) }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+          }
+        });
+        // Doughnut chart: % covered
+        adminAnalysisCharts.doughnut = new Chart(document.getElementById('adminAnalysisDoughnutChart').getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Covered', 'Remaining'],
+            datasets: [{
+              data: [totalPledged, totalRemaining > 0 ? totalRemaining : 0],
+              backgroundColor: ['#48bb78', '#ed8936'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { color: 'white' } },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.label || '';
+                    if (label) { label += ': '; }
+                    if (context.parsed !== null) { label += formatCurrency(context.parsed); }
+                    return label;
+                  }
+                }
+              }
+            }
+          }
+        });
+        // Bar chart: Pledged by category
+        const catMap = {};
+        filtered.forEach(i => { catMap[i.category] = (catMap[i.category]||0) + i.pledged; });
+        const catLabels = Object.keys(catMap);
+        const catData = Object.values(catMap);
+        adminAnalysisCharts.category = new Chart(document.getElementById('adminAnalysisCategoryChart').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: catLabels,
+            datasets: [{
+              label: 'Pledged',
+              data: catData,
+              backgroundColor: 'rgba(236,72,153,0.8)',
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+              x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+              y: { ticks: { color: 'white', callback: value => formatCurrency(value) }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+          }
+        });
+        // --- Chart PNG export buttons ---
+        setTimeout(() => {
+          const barBtn = document.getElementById('exportBarChartBtn');
+          if (barBtn && adminAnalysisCharts.bar) {
+            barBtn.onclick = function() {
+              const url = adminAnalysisCharts.bar.toBase64Image();
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'budget_vs_pledged.png';
+              a.click();
+            };
+          }
+          const doughnutBtn = document.getElementById('exportDoughnutChartBtn');
+          if (doughnutBtn && adminAnalysisCharts.doughnut) {
+            doughnutBtn.onclick = function() {
+              const url = adminAnalysisCharts.doughnut.toBase64Image();
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'overall_covered.png';
+              a.click();
+            };
+          }
+          const catBtn = document.getElementById('exportCategoryChartBtn');
+          if (catBtn && adminAnalysisCharts.category) {
+            catBtn.onclick = function() {
+              const url = adminAnalysisCharts.category.toBase64Image();
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'pledged_by_category.png';
+              a.click();
+            };
+          }
+        }, 100);
+      }
+
+      // Extend export/print for analysis tab
+      const _exportAdminTablePDF = exportAdminTablePDF;
+      exportAdminTablePDF = function(type) {
+        if (type === 'analysis') {
+          let doc = new window.jspdf.jsPDF();
+          let table = document.getElementById('adminAnalysisTable');
+          let title = 'Budget-Pledge Analysis';
+          doc.text(title, 10, 10);
+          let rows = [];
+          let headers = [];
+          table.querySelectorAll('thead tr th').forEach(th => headers.push(th.textContent.trim()));
+          table.querySelectorAll('tbody tr').forEach(tr => {
+            let row = [];
+            tr.querySelectorAll('td').forEach(td => row.push(td.textContent.trim()));
+            if (row.length) rows.push(row);
+          });
+          doc.autoTable({ head: [headers], body: rows, startY: 20 });
+          doc.save(title + '.pdf');
+          return;
+        }
+        _exportAdminTablePDF(type);
+      }
+
+      const _printAdminTable = printAdminTable;
+      printAdminTable = function(type) {
+        if (type === 'analysis') {
+          let table = document.getElementById('adminAnalysisTable');
+          let title = 'Budget-Pledge Analysis';
+          let printWindow = window.open('', '', 'height=600,width=900');
+          printWindow.document.write('<html><head><title>' + title + '</title>');
+          printWindow.document.write('<style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:8px;}th{background:#eee;}</style>');
+          printWindow.document.write('</head><body >');
+          printWindow.document.write('<h2>' + title + '</h2>');
+          printWindow.document.write(table.outerHTML);
+          printWindow.document.write('</body></html>');
+          printWindow.document.close();
+          printWindow.print();
+          return;
+        }
+        _printAdminTable(type);
+      }
+  </script>
+  <div id="adminPasswordModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
+    <div class="glass rounded-xl p-8 max-w-xs w-full">
+      <h3 class="text-xl font-bold text-white mb-4 text-center">Admin Access</h3>
+      <form id="adminPasswordForm" class="space-y-4">
+        <input id="adminPasswordInput" type="password" placeholder="Enter password" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20 text-white" required>
+        <div id="adminPasswordError" class="text-red-400 text-sm text-center hidden">Incorrect password. Try again.</div>
+        <button type="submit" class="w-full mt-2 p-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-purple-700">Access Admin</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ...existing code...
+      // Admin password protection
+      const adminBtn = document.getElementById('adminNavBtn');
+      if (adminBtn) {
+        adminBtn.addEventListener('click', function(e) {
+          if (sessionStorage.getItem('adminAccess') === 'true') {
+            switchTab('admin');
+            return;
+          }
+          e.preventDefault();
+          document.getElementById('adminPasswordModal').classList.remove('hidden');
+          document.getElementById('adminPasswordInput').focus();
+        });
+      }
+      document.getElementById('adminPasswordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('adminPasswordInput').value.trim();
+        if (input === 'jimmy must wed') {
+          sessionStorage.setItem('adminAccess', 'true');
+          document.getElementById('adminPasswordModal').classList.add('hidden');
+          document.getElementById('adminPasswordError').classList.add('hidden');
+          document.getElementById('adminPasswordInput').value = '';
+          switchTab('admin');
+        } else {
+          document.getElementById('adminPasswordError').classList.remove('hidden');
+        }
+      });
+      // Hide modal on outside click
+      document.getElementById('adminPasswordModal').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.add('hidden');
+      });
+    });
   </script>
 </body>
 </html>
