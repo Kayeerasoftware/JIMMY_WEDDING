@@ -125,33 +125,78 @@
     <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
       <!-- Dashboard Tab -->
       <div id="dashboard-tab" class="tab-content">
-        <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Budget</p><p id="totalBudget" class="text-2xl font-bold"></p></div>
-          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Pledged</p><p id="totalPledged" class="text-2xl font-bold"></p></div>
-          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Total Cleared</p><p id="totalCleared" class="text-2xl font-bold"></p></div>
-          <div class="p-6 glass rounded-xl"><p class="text-sm text-gray-400">Remaining</p><p id="totalRemaining" class="text-2xl font-bold"></p></div>
+        <div class="mb-8">
+          <h2 class="text-4xl font-extrabold tracking-tight flex items-center gap-4">
+            <span>Dashboard</span>
+            <span class="inline-block w-2 h-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 animate-pulse"></span>
+          </h2>
+          <p class="text-lg text-gray-300 mt-2">Overview of your wedding budget, pledges, and progress</p>
+          <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full mt-3"></div>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 p-6 glass rounded-xl">
-            <h3 class="text-xl font-semibold mb-4">Budget Progress</h3>
-            <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
-              <div id="progressBar" class="h-4 rounded-full progress-bar"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="p-6 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10 flex flex-col items-center min-w-0 w-full">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 shadow-lg mb-2">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </span>
+            <p class="text-sm text-gray-400 font-semibold text-center">Total Budget</p>
+            <p id="totalBudget" class="text-xl md:text-2xl font-bold break-words text-center w-full"></p>
+          </div>
+          <div class="p-6 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10 flex flex-col items-center min-w-0 w-full">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 shadow-lg mb-2">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </span>
+            <p class="text-sm text-gray-400 font-semibold text-center">Total Pledged</p>
+            <p id="totalPledged" class="text-xl md:text-2xl font-bold break-words text-center w-full"></p>
+          </div>
+          <div class="p-6 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10 flex flex-col items-center min-w-0 w-full">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-green-400 to-green-600 shadow-lg mb-2">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <p class="text-sm text-gray-400 font-semibold text-center">Total Cleared</p>
+            <p id="totalCleared" class="text-xl md:text-2xl font-bold break-words text-center w-full"></p>
+          </div>
+          <div class="p-6 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10 flex flex-col items-center min-w-0 w-full">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-500 shadow-lg mb-2">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </span>
+            <p class="text-sm text-gray-400 font-semibold text-center">Remaining</p>
+            <p id="totalRemaining" class="text-xl md:text-2xl font-bold break-words text-center w-full"></p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="lg:col-span-2 p-8 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xl font-semibold">Budget Progress</h3>
+              <span class="text-sm text-gray-400">Goal</span>
+            </div>
+            <div class="relative w-full bg-gray-700 rounded-full h-6 mb-4 overflow-hidden">
+              <div id="progressBar" class="h-6 rounded-full progress-bar flex items-center justify-end pr-4 text-white font-bold text-sm transition-all duration-500"></div>
+              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-bold text-base" id="budgetCovered"></span>
             </div>
             <p class="text-right text-gray-300"><span id="budgetCovered"></span> of budget covered</p>
           </div>
-          <div class="p-6 glass rounded-xl text-center">
-            <p class="text-lg font-semibold">Countdown</p>
-            <p id="daysRemaining" class="text-3xl font-bold"></p>
+          <div class="p-8 rounded-2xl shadow-xl bg-gradient-to-br from-purple-800/80 to-purple-900/80 border border-white/10 flex flex-col items-center justify-center">
+            <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 shadow-lg mb-2">
+              <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+            </span>
+            <p class="text-lg font-semibold mb-1">Countdown</p>
+            <p id="daysRemaining" class="text-4xl font-extrabold tracking-tight"></p>
+            <span class="text-xs text-gray-400">until the wedding day</span>
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
-          <div class="lg:col-span-3 p-6 glass rounded-xl">
-            <h3 class="text-xl font-semibold mb-4">Recent Pledges</h3>
+          <div class="lg:col-span-3 p-8 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10">
+            <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+              <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87"/><path d="M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="12" cy="7" r="4"/></svg>
+              Recent Pledges
+            </h3>
             <div id="recentPledges" class="space-y-4"></div>
           </div>
-          <div class="lg:col-span-2 p-6 glass rounded-xl">
-            <h3 class="text-xl font-semibold mb-4">Pledge Status</h3>
+          <div class="lg:col-span-2 p-8 rounded-2xl shadow-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-white/10">
+            <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+              <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Pledge Status
+            </h3>
             <div class="h-64"><canvas id="pledgeChart"></canvas></div>
           </div>
         </div>
@@ -200,6 +245,7 @@
                   <th class="p-4">Name</th>
                   <th class="p-4">Location</th>
                   <th class="p-4">Group Size</th>
+                  <th class="p-4">Phone</th>
                 </tr>
               </thead>
               <tbody id="attendeesTableBody"></tbody>
@@ -287,6 +333,7 @@
         <input id="attendeeName" type="text" placeholder="Full Name" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
         <input id="attendeeLocation" type="text" placeholder="Location (e.g., Kampala)" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
         <input id="attendeeGroupSize" type="number" placeholder="How many are you? (including yourself)" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" min="1" required>
+        <input id="attendeePhone" type="tel" placeholder="Phone Number" class="w-full p-3 glass rounded border border-white border-opacity-20 bg-black bg-opacity-20" required>
         <button type="submit" class="w-full mt-4 p-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:from-pink-600 hover:to-purple-700">Confirm Attendance</button>
       </form>
     </div>
@@ -495,7 +542,7 @@
         { id: 'PLD019', name: 'Jackson Mutegeki', amount: 100000, status: 'cleared', date: '2025-06-09', items: [], email: '', phone: '' },
         { id: 'PLD020', name: 'Flavia Ajambo', amount: 200000, status: 'cleared', date: '2025-06-09', items: [], email: '', phone: '' },
         { id: 'PLD021', name: 'Derrick Kiwana', amount: 310000, status: 'cleared', date: '2025-06-10', items: [], email: '', phone: '' },
-        { id: 'PLD022', name: 'Ndyamuhaki Ronald', amount: 420000, status: 'pending', date: '2025-06-10', items: [], email: '', phone: '' },
+        { id: 'PLD022', name: 'Ndyamuhaki Ronald', amount: 420000, status: 'cleared', date: '2025-06-10', items: [], email: '', phone: '' },
         { id: 'PLD023', name: 'Tsemwami Everton', amount: 100000, status: 'cleared', date: '2025-06-11', items: [], email: '', phone: '' },
         { id: 'PLD024', name: 'Anonymous', amount: 1000000, status: 'cleared', date: '2025-06-11', items: [], email: '', phone: '' },
         { id: 'PLD025', name: 'Bisaso family', amount: 100000, status: 'cleared', date: '2025-06-12', items: [], email: '', phone: '' },
@@ -506,7 +553,7 @@
         { id: 'PLD030', name: 'Anonymous 2', amount: 700000, status: 'cleared', date: '2025-06-15', items: [], email: '', phone: '' },
         { id: 'PLD031', name: 'Anonymous 2', amount: 300000, status: 'balance', date: '2025-06-15', items: [], email: '', phone: '' },
         { id: 'PLD032', name: 'Mariane', amount: 200000, status: 'cleared', date: '2025-06-16', items: [], email: '', phone: '' },
-        { id: 'PLD033', name: 'Angella', amount: 300000, status: 'pending', date: '2025-06-16', items: [], email: '', phone: '' },
+        { id: 'PLD033', name: 'Angella', amount: 300000, status: 'cleared', date: '2025-06-16', items: [], email: '', phone: '' },
         { id: 'PLD034', name: 'Joseph Ochepa', amount: 380000, status: 'pending', date: '2025-06-17', items: [], email: '', phone: '' },
         { id: 'PLD035', name: 'Gorreti Tumwebaze', amount: 100000, status: 'cleared', date: '2025-06-17', items: [], email: '', phone: '' },
         { id: 'PLD036', name: 'Immaculate Nanteza', amount: 100000, status: 'cleared', date: '2025-06-22', items: [], email: '', phone: '' },
@@ -520,7 +567,10 @@
         { id: 'PLD044', name: 'Daphine Akankwatsa', amount: 100000, status: 'cleared', date: '2025-06-22', items: [], email: '', phone: '' },
         { id: 'PLD045', name: 'Ojok Sunday', amount: 300000, status: 'cleared', date: '2025-06-22', items: [], email: '', phone: '' },
         { id: 'PLD046', name: 'Wani Richard', amount: 50000, status: 'cleared', date: '2025-06-22', items: [], email: '', phone: '' },
-        { id: 'PLD047', name: 'Regina Nakawuki', amount: 102000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' }
+        { id: 'PLD047', name: 'Regina Nakawuki', amount: 102000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD048', name: 'Molly Nakagimu', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD049', name: 'Phiona', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD050', name: 'Maama Joel', amount: 100000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' }
       ],
       attendees: [
         { id: 'ATT001', name: 'Nabanoba jenny', location: 'Kampala', groupSize: 1 },
@@ -564,8 +614,7 @@
     }
 
     function generateAttendeeId() {
-        const num = (state.attendees.length + 1).toString().padStart(3, '0');
-        return `ATT${num}`;
+      return 'ATT' + Date.now();
     }
 
     function showNotification(title, message, type = 'success') {
@@ -1495,7 +1544,7 @@
               </div>
               <div class="p-6 glass rounded-xl overflow-x-auto">
                 <table class="w-full text-left" id="adminAttendeeTable">
-                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">Name</th><th class="p-4">Location</th><th class="p-4">Group Size</th><th class="p-4">Actions</th></tr></thead>
+                  <thead><tr class="border-b border-white border-opacity-20"><th class="p-4">ID</th><th class="p-4">Name</th><th class="p-4">Location</th><th class="p-4">Group Size</th><th class="p-4">Phone</th><th class="p-4">Actions</th></tr></thead>
                   <tbody id="adminAttendeeTableBody"></tbody>
                 </table>
               </div>
@@ -1642,9 +1691,11 @@
           (attendee.name.toLowerCase().includes(search) || attendee.location.toLowerCase().includes(search))
         ).map(attendee => `
           <tr class="border-b border-white border-opacity-10">
+            <td class="p-4">${attendee.id}</td>
             <td class="p-4">${attendee.name}</td>
             <td class="p-4">${attendee.location}</td>
             <td class="p-4">${attendee.groupSize}</td>
+            <td class="p-4">${attendee.phone || ''}</td>
             <td class="p-4">
               <button onclick="openAdminModal('attendee', '${attendee.id}')" class="text-blue-400 hover:text-blue-300 mr-2">Edit</button>
               <button onclick="deleteAdminItem('attendee', '${attendee.id}')" class="text-red-400 hover:text-red-300">Delete</button>
@@ -1754,6 +1805,7 @@
               <input name="name" type="text" placeholder="Full Name" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.name || ''}" required>
               <input name="location" type="text" placeholder="Location" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.location || ''}" required>
               <input name="groupSize" type="number" placeholder="Group Size" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.groupSize || ''}" min="1" required>
+              <input name="phone" type="tel" placeholder="Phone Number" class="w-full p-3 glass rounded bg-black bg-opacity-20" value="${attendee.phone || ''}" required>
               <div class="flex justify-end space-x-4 pt-4">
                 <button type="button" onclick="closeModal('adminFormModal')" class="px-4 py-2 bg-gray-600 rounded-lg">Cancel</button>
                 <button type="submit" class="px-4 py-2 bg-green-600 rounded-lg">Save</button>
@@ -1845,26 +1897,52 @@
         const name = form.name.value;
         const location = form.location.value;
         const groupSize = parseInt(form.groupSize.value);
-
+        const phone = form.phone.value;
         if (id) {
-          const attendee = state.attendees.find(a => a.id === id);
-          if (attendee) {
-            attendee.name = name;
-            attendee.location = location;
-            attendee.groupSize = groupSize;
-          }
+          fetch('https://script.google.com/macros/s/AKfycbwAPyNp2mXtGEI1ENgSBjc7jPnWeD-HyW_mAZUr1zW4yiyVwEVB9rhLE2Kaxc8Him4V/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id,
+              name,
+              location,
+              groupSize,
+              phone,
+              action: 'update'
+            })
+          })
+          .then(response => response.json())
+          .then(() => {
+            closeModal('adminFormModal');
+            fetchAttendeesFromSheet();
+            showNotification('Success', 'Attendee has been updated.', 'success');
+          })
+          .catch(() => {
+            showNotification('Error', 'Could not update attendee.', 'error');
+          });
         } else {
-          const newAttendee = {
-            id: generateAttendeeId(),
-            name,
-            location,
-            groupSize
-          };
-          state.attendees.push(newAttendee);
+          fetch('https://script.google.com/macros/s/AKfycbwAPyNp2mXtGEI1ENgSBjc7jPnWeD-HyW_mAZUr1zW4yiyVwEVB9rhLE2Kaxc8Him4V/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: generateAttendeeId(),
+              name,
+              location,
+              groupSize,
+              phone,
+              action: 'create'
+            })
+          })
+          .then(response => response.json())
+          .then(() => {
+            closeModal('adminFormModal');
+            fetchAttendeesFromSheet();
+            showNotification('Success', 'Attendee has been added.', 'success');
+          })
+          .catch(() => {
+            showNotification('Error', 'Could not add attendee.', 'error');
+          });
         }
-        closeModal('adminFormModal');
-        updateAdminTab();
-        showNotification('Success', `Attendee has been ${id ? 'updated' : 'added'}.`, 'success');
       }
 
       function deleteAdminItem(type, id) {
@@ -1872,14 +1950,27 @@
 
         if (type === 'budget') {
           state.budgetItems = state.budgetItems.filter(item => item.id !== id);
+          updateAdminTab();
+          showNotification('Deleted', `The ${type} has been deleted.`, 'info');
         } else if (type === 'pledge') {
           state.pledges = state.pledges.filter(pledge => pledge.id !== id);
+          updateAdminTab();
+          showNotification('Deleted', `The ${type} has been deleted.`, 'info');
         } else if (type === 'attendee') {
-          state.attendees = state.attendees.filter(attendee => attendee.id !== id);
+          fetch('https://script.google.com/macros/s/AKfycbwAPyNp2mXtGEI1ENgSBjc7jPnWeD-HyW_mAZUr1zW4yiyVwEVB9rhLE2Kaxc8Him4V/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, action: 'delete' })
+          })
+          .then(response => response.json())
+          .then(() => {
+            fetchAttendeesFromSheet();
+            showNotification('Deleted', 'The attendee has been deleted.', 'info');
+          })
+          .catch(() => {
+            showNotification('Error', 'Could not delete attendee.', 'error');
+          });
         }
-
-        updateAdminTab();
-        showNotification('Deleted', `The ${type} has been deleted.`, 'info');
       }
 
       function deletePledge(pledgeId) {
@@ -1930,9 +2021,11 @@
           
           const name = document.getElementById('attendeeName').value.trim();
           const location = document.getElementById('attendeeLocation').value.trim();
-          const groupSize = parseInt(document.getElementById('attendeeGroupSize').value);
+          const groupSizeValue = document.getElementById('attendeeGroupSize').value.trim();
+          const groupSize = Number(groupSizeValue);
+          const phone = document.getElementById('attendeePhone').value.trim();
           
-          if (!name || !location || !groupSize || groupSize < 1) {
+          if (!name || !location || !groupSizeValue || isNaN(groupSize) || groupSize < 1 || !phone) {
             showNotification('Form Incomplete', 'Please fill in all fields correctly.', 'error');
             return;
           }
@@ -1942,18 +2035,29 @@
             name: name,
             location: location,
             groupSize: groupSize,
+            phone: phone,
+            action: 'create'
           };
 
-          state.attendees.push(newAttendee);
-          
-          this.reset();
-          closeModal('attendeeFormModal');
-          
-          showNotification('Registration Successful', `Thank you, ${name}! Your attendance has been registered.`, 'success');
-          
-          if (state.currentTab === 'attendees') {
-            updateAttendeesTab();
-          }
+          fetch('https://script.google.com/macros/s/AKfycbwAPyNp2mXtGEI1ENgSBjc7jPnWeD-HyW_mAZUr1zW4yiyVwEVB9rhLE2Kaxc8Him4V/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newAttendee)
+          })
+          .then(response => response.json())
+          .then((data) => {
+            if (data.result === "success") {
+              this.reset();
+              closeModal('attendeeFormModal');
+              showNotification('Registration Successful', `Thank you, ${name}! Your attendance has been registered.`, 'success');
+              fetchAttendeesFromSheet();
+            } else {
+              showNotification('Error', data.message || 'Could not register. Please try again.', 'error');
+            }
+          })
+          .catch(() => {
+            showNotification('Error', 'Could not register. Please try again.', 'error');
+          });
         });
 
         document.querySelectorAll('.footer-year').forEach(el => {
@@ -2107,6 +2211,7 @@
                   <td class="p-4">${attendee.name}</td>
                   <td class="p-4">${attendee.location}</td>
                   <td class="p-4 text-center">${attendee.groupSize}</td>
+                  <td class="p-4">${attendee.phone || ''}</td>
               `;
               tbody.appendChild(row);
           });
@@ -2325,6 +2430,35 @@
         }
         _printAdminTable(type);
       }
+
+      // 1. Add this function to fetch attendees from Google Sheet
+      function fetchAttendeesFromSheet() {
+        fetch('https://script.google.com/macros/s/AKfycbwAPyNp2mXtGEI1ENgSBjc7jPnWeD-HyW_mAZUr1zW4yiyVwEVB9rhLE2Kaxc8Him4V/exec') // <-- Replace with your actual Apps Script Web App URL
+          .then(response => response.json())
+          .then(attendees => {
+            state.attendees = attendees.map(a => ({
+              id: a.id,
+              name: a.name,
+              location: a.location,
+              groupSize: a.groupSize,
+              phone: a.phone
+            }));
+            if (state.currentTab === 'attendees') {
+              updateAttendeesTab();
+            }
+          })
+          .catch(() => {
+            showNotification('Error', 'Could not load attendees from Google Sheet.', 'error');
+          });
+      }
+
+      // 3. Call fetchAttendeesFromSheet() on page load
+      // In your DOMContentLoaded event, add:
+      document.addEventListener('DOMContentLoaded', () => {
+        // ...existing code...
+        fetchAttendeesFromSheet();
+        // ...existing code...
+      });
   </script>
   <div id="adminPasswordModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
     <div class="glass rounded-xl p-8 max-w-xs w-full">
