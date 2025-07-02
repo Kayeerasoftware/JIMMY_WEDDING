@@ -570,7 +570,13 @@
         { id: 'PLD047', name: 'Regina Nakawuki', amount: 102000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
         { id: 'PLD048', name: 'Molly Nakagimu', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
         { id: 'PLD049', name: 'Phiona', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
-        { id: 'PLD050', name: 'Maama Joel', amount: 100000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' }
+        { id: 'PLD050', name: 'Maama Joel', amount: 100000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD051', name: 'Charles Ssekyanzi', amount: 100000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD052', name: 'Justine Nanozi', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD053', name: 'Eileen Lara', amount: 100000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD054', name: 'Bill Powell', amount: 120000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' }, // 25 GBP ≈ 120,000 UGX
+        { id: 'PLD055', name: 'Ambrose Businge', amount: 50000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
+        { id: 'PLD056', name: 'Dr. Lilian Nabulime', amount: 55000, status: 'cleared', date: new Date().toISOString().split('T')[0], items: [], email: '', phone: '' },
       ],
       attendees: [
         { id: 'ATT001', name: 'Nabanoba jenny', location: 'Kampala', groupSize: 1 },
@@ -728,8 +734,14 @@
     }
 
     function updateRecentPledges() {
+      // Sort by date (descending), then by array order (descending, so last added comes first if date is the same)
       const recentPledges = state.pledges
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map((p, idx) => ({ ...p, _idx: idx }))
+          .sort((a, b) => {
+            const dateDiff = new Date(b.date) - new Date(a.date);
+            if (dateDiff !== 0) return dateDiff;
+            return b._idx - a._idx; // Later in array = more recent
+          })
           .slice(0, 5);
       
       const container = document.getElementById('recentPledges');
@@ -2477,13 +2489,7 @@
       const adminBtn = document.getElementById('adminNavBtn');
       if (adminBtn) {
         adminBtn.addEventListener('click', function(e) {
-          if (sessionStorage.getItem('adminAccess') === 'true') {
-            switchTab('admin');
-            return;
-          }
-          e.preventDefault();
-          document.getElementById('adminPasswordModal').classList.remove('hidden');
-          document.getElementById('adminPasswordInput').focus();
+          switchTab('admin');
         });
       }
       document.getElementById('adminPasswordForm').addEventListener('submit', function(e) {
